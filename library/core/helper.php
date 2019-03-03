@@ -209,7 +209,11 @@ class helper extends \q_search {
             isset( self::$device ) 
             && self::$device 
         ) { 
-            return self::$device; 
+
+            // self::log( 'handle already set: '.self::$device );
+
+            return self::$device;
+
         }
 
         // check plugin is active ##
@@ -217,6 +221,8 @@ class helper extends \q_search {
             function_exists( 'is_plugin_active' ) 
             && ! \is_plugin_active( "device-theme-switcher/dts_controller.php" ) 
         ) {
+
+            // self::log( 'handle forced to desktop' );
 
             return self::$device = 'desktop'; // defaults to desktop ##
 
@@ -260,7 +266,7 @@ class helper extends \q_search {
         // trim client prefix "ccigh-" from device handle ##
         $handle = ( $handle && false !== strpos( $handle, 'desktop' ) ) ? 'desktop' : 'handheld' ;
 
-        #self::log( 'handle: '.$handle );
+        // self::log( 'handle: '.$handle );
 
         // set and return the property value ##
         return self::$device = $handle;

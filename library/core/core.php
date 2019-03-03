@@ -31,6 +31,8 @@ class core extends \q_search {
         // new array ##
         $config = [];
 
+        // helper::log( 'Device: '.helper::get_device() );
+
         // values ##
         $config["widget_title"]     = __( "Search", 'q-search' );
         $config["results"]          = \apply_filters( 'q/search/results', ['Post found', 'Posts found'] ); // results text ##
@@ -167,7 +169,7 @@ class core extends \q_search {
             
                 // build args list ##
                 $args = array(
-                    'number'                => intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
+                    'number'                => $posted['posts_per_page'] > 20 ? 20 : intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
                     'post_type'             => 'users', #core::properties( 'post_type' ),
                     'role__not_in'          => 'Administrator',
                     'meta_key'              => self::properties( 'meta_key' ),
@@ -184,7 +186,7 @@ class core extends \q_search {
                 // build args list ##
                 $args = array(
                         "post_type"         => $posted['post_type']
-                    ,   "posts_per_page"    => (int) $posted['posts_per_page']
+                    ,   "posts_per_page"    => $posted['posts_per_page'] > 20 ? 20 : (int) $posted['posts_per_page'] // max 20 ##
                     ,   "tax_query"         => array()
                     ,   "orderby"           => $posted['order_by']
                     ,   "order"             => $posted['order']
@@ -222,7 +224,7 @@ class core extends \q_search {
 
                 // build args list ##
                 $args = array(
-                    'number'                => intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
+                    'number'                => $posted['posts_per_page'] > 20 ? 20 : intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
                     'post_type'             => 'users', #core::properties( 'post_type' ),
                     'role__not_in'          => 'Administrator',
                     'meta_key'              => self::properties( 'meta_key' ),
@@ -240,21 +242,24 @@ class core extends \q_search {
                 $posts = \get_posts([
                     'post_type'         => $posted['post_type'],
                     'posts_per_page'    => -1, // all of them ##
-                    "post_status"       => "publish"
+                    "post_status"       => "publish",
+                    "post__in"          => \get_site_option( 'sticky_posts', [] )
                 ]);
 
                 // get IDs ##
-                $posts_ids = \wp_list_pluck( $posts, 'ID' );
+                $post__in = \wp_list_pluck( $posts, 'ID' );
+
+                // helper::log( $post__in );
 
                 // now match ID's to the sticky posts ##
-                $post__in = array_intersect( $posts_ids, \get_option( 'sticky_posts', [] ) );
+                #$post__in = array_intersect( $posts_ids, \get_site_option( 'sticky_posts', [] ) );
 
                 // helper::log( $post__in );
                 
                 // build args list ##
                 $args = array(
                     'post__in'              => $post__in, #\get_option( 'sticky_posts' ), // self::array_truncate( \get_option( 'sticky_posts' ), 12 ) ##
-                    'posts_per_page'        => intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
+                    'posts_per_page'        => $posted['posts_per_page'] > 20 ? 20 : intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
                     'post_type'             => $posted['post_type'], #core::properties( 'post_type' ),
                     'ignore_sticky_posts'   => true, // hmmm ##
                     "post_status"           => "publish"

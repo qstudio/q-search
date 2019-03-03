@@ -13,7 +13,7 @@
  * Plugin Name:     Q Search
  * Plugin URI:      https://www.qstudio.us
  * Description:     Filter posts by taxonomies or text search using AJAX to load results
- * Version:         3.0.0
+ * Version:         3.0.1
  * Author:          Q Studio
  * Author URI:      https://www.qstudio.us
  * License:         GPL
@@ -37,8 +37,8 @@ if ( ! class_exists( 'q_search' ) ) {
         private static $instance = null;
 
         // Plugin Settings
-        const version = '2.0.1';
-        static $device = 'handheld';
+        const version = '3.0.1';
+        static $device = ''; // start false ##
         static $debug = false;
         // static $load_count = 0;
         const text_domain = 'q-search'; // for translation ##

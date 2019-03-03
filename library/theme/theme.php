@@ -1,6 +1,7 @@
 <?php
 
 namespace q\search\theme;
+
 use q\search\core\helper as helper;
 use q\search\core\core as core;
 #use q\search\user\user as user;
@@ -20,57 +21,57 @@ class theme extends \q_search {
 
 
 
-  /*
-  * Script enqueuer
-  *
-  * @since  2.0
-  */
-  public static function wp_enqueue_scripts() {
+	/*
+	* Script enqueuer
+	*
+	* @since  2.0
+	*/
+	public static function wp_enqueue_scripts() {
 
-    // is widget active ##
-    // if (
-    //     ! \is_active_widget( false, false, 'q_widget_search', true )
-    // ) {
+		// is widget active ##
+		// if (
+		//     ! \is_active_widget( false, false, 'q_widget_search', true )
+		// ) {
 
-    //     return false;
+		//     return false;
 
-    // }
+		// }
 
-    \wp_register_style( 'q-search-css', helper::get( "theme/css/q-search.css", 'return' ), '', self::version, 'all' );
-    \wp_enqueue_style( 'q-search-css' );
+		\wp_register_style( 'q-search-css', helper::get( "theme/css/q-search.css", 'return' ), '', self::version, 'all' );
+		\wp_enqueue_style( 'q-search-css' );
 
-    // history ##
-    #\wp_register_script('jquery-history-js', helper::get( "theme/javascript/jquery.history.js" , 'return' ) ,array('jquery'), self::version, true );
-    #\wp_enqueue_script('jquery-history-js');
+		// history ##
+		#\wp_register_script('jquery-history-js', helper::get( "theme/javascript/jquery.history.js" , 'return' ) ,array('jquery'), self::version, true );
+		#\wp_enqueue_script('jquery-history-js');
 
-    // add JS ## -- after all dependencies ##
-    \wp_enqueue_script( 'q-search-js', helper::get( "theme/javascript/q-search.js", 'return' ), array( 'jquery' ), self::version, true );
+		// add JS ## -- after all dependencies ##
+		\wp_enqueue_script( 'q-search-js', helper::get( "theme/javascript/q-search.js", 'return' ), array( 'jquery' ), self::version, true );
 
-    // pass variable values defined in parent class ##
-    \wp_localize_script( 'q-search-js', 'q_search', array(
-        'ajaxurl'           => \admin_url( 'admin-ajax.php', \is_ssl() ? 'https' : 'http' ), /*, 'https' */ ## add 'https' to use secure URL ##
-        'debug'             => self::$debug,
-        'site_name'         => \get_bloginfo("sitename")
-    ,   'search'            => __( 'Search', 'q-search' )
-    ,   'search_results_for'=> __( 'Results', 'q-search' )
-      //,   'on_load_text' => __( 'Search & filter to see results', 'q-search' )
-    ));
+		// pass variable values defined in parent class ##
+		\wp_localize_script( 'q-search-js', 'q_search', array(
+			'ajaxurl'           => \admin_url( 'admin-ajax.php', \is_ssl() ? 'https' : 'http' ), /*, 'https' */ ## add 'https' to use secure URL ##
+			'debug'             => self::$debug,
+			'site_name'         => \get_bloginfo("sitename")
+		,   'search'            => __( 'Search', 'q-search' )
+		,   'search_results_for'=> __( 'Results', 'q-search' )
+		//,   'on_load_text' => __( 'Search & filter to see results', 'q-search' )
+		));
 
-  }
+  	}
 
 
-  /**
-   * Add image sizes crops
-   *
-   * @since        0.1.0
-   */
-  public static function add_image_sizes()
-  {
+	/**
+	 * Add image sizes crops
+	 *
+	 * @since        0.1.0
+	 */
+	public static function add_image_sizes()
+	{
 
-    \add_image_size( 'desktop-q-search', 800, 600, true ); // desktop course landing page ##
-    \add_image_size( 'handheld-q-search', 600, 400, true ); // handheld course landing page ##
+		\add_image_size( 'desktop-q-search', 800, 600, true ); // desktop course landing page ##
+		\add_image_size( 'handheld-q-search', 600, 400, true ); // handheld course landing page ##
 
-  }
+  	}	
 
 
   /**
@@ -84,20 +85,20 @@ class theme extends \q_search {
 
     // helper::log( 'rendering...' );
 
-    ?>
+?>
     <div>
-    <?php
+<?php
 
     // let's check if there are any posts to search ##
     if ( core::has_posts() ) {
 
-      // add inline JS to instatiate AJAX call ##
-      self::scripts();
+		// add inline JS to instatiate AJAX call ##
+		self::scripts();
 
-      ?>
-      <div class="q-search-li">
-        <div id="q-search-content" class="horizontal">
-          <?php
+?>
+	<div class="q-search-li">
+		<div id="q-search-content" class="horizontal">
+<?php
 
           // build filter navigation ##
           self::filters();
@@ -183,12 +184,12 @@ class theme extends \q_search {
     */
     ?>
     <div class="ajax-loaded  q-search-default">
-      <h3><?php the_title();?></h3>
-      <a href="<?php the_permalink(); ?>" title="<?php the_title();?>">
-        <?php the_post_thumbnail(array( 150, 150 )); ?>
+      <h3><?php \the_title();?></h3>
+      <a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
+        <?php \the_post_thumbnail(array( 150, 150 )); ?>
       </a>
-      <p><?php the_excerpt(); ?></p>
-      <a href="<?php the_permalink(); ?>" title="<?php the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
+      <p><?php \the_excerpt(); ?></p>
+      <a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
     </div>
     <?php
 

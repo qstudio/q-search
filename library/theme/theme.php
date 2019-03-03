@@ -103,7 +103,7 @@ class theme extends \q_search {
           // build filter navigation ##
           self::filters();
 
-          // add AJAX section ##
+          // add AJAX section ## @TODO pagination markup mismatch the design
           self::results();
 
           ?>
@@ -234,6 +234,7 @@ class theme extends \q_search {
    *
    * @since       1.7.0
    * @return      string      HTML for filter nav
+   * @TODO missing keyword, tag, country filters. search by filtering doesn't work
    */
   protected static function filters()
   {

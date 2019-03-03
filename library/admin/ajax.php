@@ -15,8 +15,8 @@ class ajax extends \q_search {
     {
 
         // ajax search calls ##
-        \add_action( 'wp_ajax_q_search', array( 'q\\q_search\\core\\core', 'query' ) );
-        \add_action( 'wp_ajax_nopriv_q_search', array( 'q\\q_search\\core\\core', 'query' ) );
+        \add_action( 'wp_ajax_q_search', array( 'q\\search\\core\\core', 'query' ) );
+        \add_action( 'wp_ajax_nopriv_q_search', array( 'q\\search\\core\\core', 'query' ) );
 
     }
 

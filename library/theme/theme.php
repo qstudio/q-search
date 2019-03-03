@@ -229,78 +229,76 @@ class theme extends \q_search {
 
 
 
-  /**
-   * build list of terms to filter by
-   *
-   * @since       1.7.0
-   * @return      string      HTML for filter nav
-   * @TODO missing keyword, tag, country filters. search by filtering doesn't work
-   */
-  protected static function filters()
-  {
+	/**
+	 * build list of terms to filter by
+	 *
+	 * @since       1.7.0
+	 * @return      string      HTML for filter nav
+	 * @TODO missing keyword, tag, country filters. search by filtering doesn't work
+	 */
+	protected static function filters()
+	{
 
-    // check for passed values or merge defaults ##
-    $post_type = array( core::properties( 'post_type' ) );
-    $taxonomies = explode( ",", core::properties( 'taxonomies' ) );
-    #helper::log( $taxonomies );
-    $table = core::properties( 'table' );
-    $application = core::properties( 'application' );
-    $device = core::properties( 'device' );
-    $class = core::properties( 'class' );
-    $filter_type = core::properties( 'filter_type' );
-    $hide_titles = core::properties( 'hide_titles' );
-    $filter_position = core::properties( 'filter_position' );
-    $show_count = core::properties( 'show_count' );
-    $show_input_text = core::properties( 'show_input_text' );
+		// check for passed values or merge defaults ##
+		$post_type = array( core::properties( 'post_type' ) );
+		$taxonomies = explode( ",", core::properties( 'taxonomies' ) );
+		#helper::log( $taxonomies );
+		$table = core::properties( 'table' );
+		$application = core::properties( 'application' );
+		$device = core::properties( 'device' );
+		$class = core::properties( 'class' );
+		$filter_type = core::properties( 'filter_type' );
+		$hide_titles = core::properties( 'hide_titles' );
+		$filter_position = core::properties( 'filter_position' );
+		$show_count = core::properties( 'show_count' );
+		$show_input_text = core::properties( 'show_input_text' );
 
-    // position the filters correctly ##
-    $position = $filter_position == 'vertical' ? 'vertical' : 'horizontal' ;
+		// position the filters correctly ##
+		$position = $filter_position == 'vertical' ? 'vertical' : 'horizontal' ;
 
 ?>
-	<form id="q-search-form" class="ajax-filters <?php echo $position; ?>">
+		<form id="q-search-form" class="ajax-filters <?php echo $position; ?>">
 <?php
 
-	// text input ##
-	self::filter_input();
+		// text input ##
+		echo self::filter_input();
 
-	$queried_object = \get_queried_object();
-	// helper::log($taxonomies);
+		$queried_object = \get_queried_object();
+		// helper::log($taxonomies);
 
-	if ( 
-		$taxonomies 
-		&& isset( $taxonomies[0] ) 
-		&& $taxonomies[0] > '' 
-	) {
+		if ( 
+			$taxonomies 
+			&& isset( $taxonomies[0] ) 
+			&& $taxonomies[0] > '' 
+		) {
 
-		foreach( $taxonomies as $taxonomy ) {
+			foreach( $taxonomies as $taxonomy ) {
 
-            // clean up ##
-            $taxonomy = trim( $taxonomy );
+			// clean up ##
+			$taxonomy = trim( $taxonomy );
 
-            // get tax ##
-            if ( false === $get_taxonomy = core::get_taxonomy( $taxonomy ) ) {
+			// get tax ##
+			if ( false === $get_taxonomy = core::get_taxonomy( $taxonomy ) ) {
 
-              	helper::log( 'skipping: '.$taxonomy );
+				// helper::log( 'skipping: '.$taxonomy );
 
-              	continue;
+				continue;
 
-            }
+			}
 
-
-            if ( 
+			if ( 
 				$filter_type == 'list'
 				&& $hide_titles == 0 
 			){
 
-			  	echo \apply_filters( 'q/search/filter/title', "<h4>{$the_tax_name}</h4>" );
+				echo \apply_filters( 'q/search/filter/title', "<h4>{$the_tax_name}</h4>" );
 
-            }
+	        }
 
+    	    #pr($term);
 
-            #pr($term);
-
-            // select or list items ? ##
-            if( $taxonomy != 'mos_interest' ) {
+			// select or list items ? ##
+			if( $taxonomy != 'mos_interest' ) {
 
 				echo "<div class='col'>";
 				echo "<div class='form-group'>";
@@ -312,25 +310,27 @@ class theme extends \q_search {
 				echo "<option selected value=\"\" class=\"default\">Select</option>";
 
 				#wp_die(pr($get_taxonomy["terms"]));
-        
+				
 				foreach( $get_taxonomy["terms"] as $term ) {
 
-          			echo "<option value=\"{$term->term_id}\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\" >";
+            		echo "<option value=\"{$term->term_id}\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\" >";
 
-					echo "{$term->name}";
+		            echo "{$term->name}";
 
-					if( $show_count == 1 ) {
-					  	echo " ({$term->count})";
+        		    if( $show_count == 1 ) {
+						
+						echo " ({$term->count})";
+			
 					}
 
-					echo "</option>";
+            		echo "</option>";
 
 				}
 
 				echo "</select>";
 				echo "</div></div>";
 
-            } else {
+			} else {
 
 				echo "<div><div class='tags form-group'>";
 				echo '<div><label>choose interests</label></div>';
@@ -338,24 +338,24 @@ class theme extends \q_search {
 				foreach( $get_taxonomy["terms"] as $term ) {
 
 					echo '<div class="tag">';
-          			echo '<input name="'.$taxonomy.'[]" id="interest-'.$term->slug.'" value="'.$term->term_id.'" type="checkbox" ';
+            		echo '<input name="'.$taxonomy.'[]" id="interest-'.$term->slug.'" value="'.$term->term_id.'" type="checkbox" ';
           
 					if ( $term->term_id == $queried_object->term_id ) {
 
-					  echo " checked";
+						echo " checked";
 
-          			}
+            		}
           
 					echo '/><label for="interest-'.$term->slug.'">'.$term->name.'</label>';
 
-	//                echo "\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\"><a href=\"#\" class=\"ajax-filter-label\"><span class=\"checkbox\"></span>{$term->name}</a></label>";
-	//                if( $show_count == 1 ) {
-	//                  echo " ({$term->count})";
-	//                }
+            		// echo "\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\"><a href=\"#\" class=\"ajax-filter-label\"><span class=\"checkbox\"></span>{$term->name}</a></label>";
+            //                if( $show_count == 1 ) {
+            //                  echo " ({$term->count})";
+            //                }
 
-					echo "</div>";
+            		echo "</div>";
 
-				}
+		  		}
 
 				echo '</div></div>';
 
@@ -395,7 +395,7 @@ class theme extends \q_search {
 
 	$markup = '
 	<div class="input text input-searcher">
-		<input type="text" value="'.$searcher.'" name="q-search-input" id="q-search-input" placeholder="'.\_e( "Keyword", 'q-search' ).'" class="q-search-input filter-selected" />	
+		<input type="text" value="" name="searcher" id="searcher" placeholder="'.\_e( "Keyword", 'q-search' ).'" class="searcher filter-selected" />	
 	</div>
 	';
 
@@ -420,7 +420,7 @@ class theme extends \q_search {
 
 ?>
 	<div class="input text input-searcher">
-		<input type="text" value="<?php $searcher; ?>" name="q-search-input" id="q-search-input" placeholder="<?php _e("Keyword", 'q-search' ); ?>" class="q-search-input filter-selected" />
+		<input type="text" value="" name="q-search-input" id="q-search-input" placeholder="<?php _e("Keyword", 'q-search' ); ?>" class="q-search-input filter-selected" />
 	</div>
 <?php
 

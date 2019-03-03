@@ -290,6 +290,8 @@ class core extends \q_search {
         $posted['order']              = isset( $_POST['order'] ) ? $_POST['order'] : core::properties( 'order' ) ;
         $posted['order_by']           = isset( $_POST['order_by'] ) ? $_POST['order_by'] : core::properties( 'order_by' ) ;
 
+        // helper::log( isset( $_POST['filters'] ) ? $_POST['filters'] : '' );
+
         // $filters = [];
         if ( isset( $_POST['filters'] ) ) {
         
@@ -341,8 +343,8 @@ class core extends \q_search {
         }
 
         // blank ##
-        $filters = '';
-        $filters = array_filter($posted['_POST_filters']);
+        // $filters = '';
+        $filters = isset( $posted['_POST_filters'] ) ? array_filter( $posted['_POST_filters'] ) : '' ;
 
         // counter ##
         $c = 0;
@@ -741,8 +743,13 @@ class core extends \q_search {
         #$this->date_range = false;
         if ( ! empty( $filters ) ){
 
+            // helper::log( 'Filters passed: ' );
+            // helper::log( $filters );
+
             // add all the filters to tax_query ##
             foreach( $filters as $key => $value ){
+
+                // // helper::log( 'key: '.$key );
 
                 // data filtering ##
                 if ( $key == 'date' ) {
@@ -762,7 +769,7 @@ class core extends \q_search {
                     $args['author'] = $value;
 
                 // text search filtering ##
-                } elseif ( $key == 'search' ) {
+                } elseif ( $key == 'searcher' ) {
 
                     if ( 'users' == core::properties( 'table' ) ) {
                         
@@ -797,7 +804,10 @@ class core extends \q_search {
                 }
 
             }
+
         }
+
+        // helper::log( $args );
 
         // inserts a "AND" relation if more than one array in the tax_query ##
         if( isset( $args['tax_query'] ) && count( $args['tax_query'] ) > 1 ) {

@@ -33,7 +33,7 @@
 
         title: function () {
 
-            var $q_search_input = $("input#q-search-input").val();
+            var $q_search_input = $("input#searcher").val();
             var $category = $("select#category").val();
 
             // default ##
@@ -43,9 +43,9 @@
 
             // add search term ? ##
             if ( $q_search_input > '' ) {
-                $filter_title = $filter_title + $("input#q-search-input").val() + ' | ';
+                $filter_title = $filter_title + $("input#searcher").val() + ' | ';
                 if ( $filter_page_title.length > 0 ) { $filter_page_title = $filter_page_title+' + '; }
-                $filter_page_title = $filter_page_title +'"'+ $("input#q-search-input").val()+'"';
+                $filter_page_title = $filter_page_title +'"'+ $("input#searcher").val()+'"';
                 $filter_title_update = true; // yep ##
             }
 
@@ -87,13 +87,14 @@
             // Return an array of selected navigation classes.
             var arr = [];
             node.each(function () {
-                if ( $(this).attr("id") == 'q-search-input' ) {
-                    var id = "search="+$("#q-search-input").val()
+                if ( $(this).attr("id") == 'searcher' ) {
+                    var id = "search="+$("#searcher").val()
                 } else {
                     var id = $(this).data( tax );
                 }
                 if ( id ) arr.push(id);
             });
+            console.dir( arr );
             return arr;
 
         },
@@ -492,7 +493,7 @@
             this.progbar = $(this.opts['progbar']);
             this.selected_filters = this.opts['selected_filters'];
 
-            //$title_default = document.getElementsByTagName("title")[0].innerHTML;
+            // $title_default = document.getElementsByTagName("title")[0].innerHTML;
 
             // Run the methods.
             this.clicker();
@@ -506,12 +507,11 @@
         'loader': 			'#ajax-loader',
         'section': 			'#ajax-filtered-section',
         'links': 			'.paginationNav, .pagelink, #go',
-        'inputs': 			'.q-search-input',
+        'inputs': 			'.searcher',
         'selects': 			'.q-search-select',
         'progbar': 			'#progbar',
         'selected_filters': 'filter-selected'
     });
-
 
     // pagination clicks scroll the viewer back to the top of the page ##
     $("body").on( 'click', 'nav.pagination a', function(e) {
@@ -524,21 +524,21 @@
     });
 
     // toggle placeholder text on search input ##
-    var placeholder_search = $('#q-search-input').attr('placeholder');
-    $('#q-search-input').focus(function(){
+    var placeholder_search = $('#searcher').attr('placeholder');
+    $('#searcher').focus(function(){
         $(this).attr('placeholder','');
     });
-    $('#q-search-input').focusout(function(){
+    $('#searcher').focusout(function(){
         $(this).attr('placeholder', placeholder_search );
     });
 
-    $( document ).on ('keypress', "input#q-search-input", function(event) {
-        if (event.which == 13) {
-            // console.log("pressed enter");
-            event.preventDefault();
-            $('input#go')[0].click()
-        }
-    });
+    // $( document ).on ('keypress', "input#searcher", function(event) {
+    //     if (event.which == 13) {
+    //         // console.log("pressed enter");
+    //         event.preventDefault();
+    //         $('input#go')[0].click()
+    //     }
+    // });
 
     // hide all search filters on load ( other than audience selection ) ##
     // $( "#q-search ul.ajax-filters li.ajax-filters-li:gt(0)" ).hide();

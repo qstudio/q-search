@@ -257,7 +257,7 @@ class theme extends \q_search {
 		$position = $filter_position == 'vertical' ? 'vertical' : 'horizontal' ;
 
 ?>
-		<form id="q-search-form" class="ajax-filters <?php echo $position; ?>">
+		<form id="q-search-form" class="ajax-filters row <?php echo $position; ?>">
 <?php
 
 		// text input ##
@@ -300,7 +300,7 @@ class theme extends \q_search {
 			// select or list items ? ##
 			if( $taxonomy != 'mos_interest' ) {
 
-				echo "<div class='col'>";
+				echo "<div class='col-8'>";
 				echo "<div class='form-group'>";
 				echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
 				echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
@@ -366,7 +366,7 @@ class theme extends \q_search {
 	} // taxs set ##
 
 ?>
-	<div id="q-search">
+	<div id="q-search" class="col-12">
         <div class="buttons">
           	<div class="input">
             	<input type="reset" id="reset" class="qs-reset qs-button qs-reset" value="Clear choices">
@@ -394,8 +394,8 @@ class theme extends \q_search {
 	}
 
 	$markup = '
-	<div class="input text input-searcher">
-		<input type="text" value="" name="searcher" id="searcher" placeholder="'.\_e( "Keyword", 'q-search' ).'" class="searcher filter-selected" />	
+	<div class="input text input-searcher col-4">
+		<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
 	</div>
 	';
 

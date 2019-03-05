@@ -94,7 +94,7 @@
                 }
                 if ( id ) arr.push(id);
             });
-            // console.dir( arr );
+            console.dir( arr );
             return arr;
 
         },

@@ -28,15 +28,6 @@ class theme extends \q_search {
 	*/
 	public static function wp_enqueue_scripts() {
 
-		// is widget active ##
-		// if (
-		//     ! \is_active_widget( false, false, 'q_widget_search', true )
-		// ) {
-
-		//     return false;
-
-		// }
-
 		\wp_register_style( 'q-search-css', helper::get( "theme/css/q-search.css", 'return' ), '', self::version, 'all' );
 		\wp_enqueue_style( 'q-search-css' );
 
@@ -74,14 +65,14 @@ class theme extends \q_search {
   	}	
 
 
-  /**
-   * Render the search engine
-   *
-   * @since       0.1
-   * @return      HTML
-   */
-  public static function render()
-  {
+	/**
+	 * Render the search engine
+	 *
+	 * @since       0.1
+	 * @return      HTML
+	 */
+	public static function render()
+	{
 
     // helper::log( 'rendering...' );
 
@@ -96,45 +87,45 @@ class theme extends \q_search {
 		self::scripts();
 
 ?>
-	<div class="q-search-li">
-		<div id="q-search-content" class="horizontal">
+		<div class="q-search-li">
+			<div id="q-search-content" class="horizontal">
 <?php
 
-          // build filter navigation ##
-          self::filters();
+			// build filter navigation ##
+			self::filters();
 
-          // add AJAX section ## @TODO pagination markup mismatch the design
-          self::results();
+			// add AJAX section ##
+			self::results();
 
-          ?>
-        </div>
-      </div>
-      </div>
-      <?php
+?>
+			</div>
+		</div>
+	</div>
+<?php
 
     } else {
 
-      helper::log( 'has_posts returned zero' );
+      	// helper::log( 'has_posts returned zero' );
 
-      // nothing to search :( ##
-      self::no_posts();
+		// nothing to search :( ##
+		self::no_posts();
 
     }
 
-  }
+}
 
 
 
 
-  /**
-   * Message to show when no posts available to search
-   * Message shown is controllable via optional ACF storage in admin
-   *
-   * @since       0.0.5
-   * @return      string      HTML
-   */
-  public static function no_posts()
-  {
+	/**
+	 * Message to show when no posts available to search
+	 * Message shown is controllable via optional ACF storage in admin
+	 *
+	 * @since       0.0.5
+	 * @return      string      HTML
+	 */
+	public static function no_posts()
+	{
 
     // grab global $post;
     global $post;
@@ -143,21 +134,21 @@ class theme extends \q_search {
     // check for post_meta field containing string for message ##
     if ( $post && $post->q_search_no_results ) {
 
-      #pr( 'Found string..' );
-      $message = $post->q_search_no_results;
+		#pr( 'Found string..' );
+		$message = $post->q_search_no_results;
 
     } else {
 
-      // allow message to be passed ##
-      $message = __( "No Results Found", 'q-search' ) ;
+		// allow message to be passed ##
+		$message = __( "No Results Found", 'q-search' ) ;
 
     }
 
-    ?>
+?>
     <p class="no-results"><?php echo $message; ?></p>
-    <?php
+<?php
 
-  }
+	}
 
 
 
@@ -213,16 +204,16 @@ class theme extends \q_search {
     <div id="ajax-content">
 <!--      <h1 class="entry-title"></h1>-->
 <!--      <p class="count-results"></p>-->
-      <div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'posts' ); ?>">
-        <?php
+      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'posts' ); ?>">
+<?php
 
         // run load query ##
         core::query([ 'load' => true ]);
 
-        ?>
-      </div>
+?>
+      	</div>
     </div>
-    <?php
+<?php
 
   }
 
@@ -376,119 +367,119 @@ class theme extends \q_search {
 </form>
 <?php
 
-  }
+  	}
 
 
 
 
-  public static function filter_input()
-  {
+	public static function filter_input()
+	{
 
-	// is this shown ? ##
-	$show_input_text = core::properties( 'show_input_text' );
+		// is this shown ? ##
+		$show_input_text = core::properties( 'show_input_text' );
 
-	if ( ! $show_input_text ) {
+		if ( ! $show_input_text ) {
 
-		return false;
+			return false;
 
-	}
+		}
 
-	$markup = '
-	<div class="input text input-searcher col-4">
-		<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
-	</div>
-	';
+		$markup = '
+		<div class="input text input-searcher col-4">
+			<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
+		</div>
+		';
 
-	// filter ##
-	return \apply_filters( 'q/search/filter/input', $markup );
+		// filter ##
+		return \apply_filters( 'q/search/filter/input', $markup );
 	
-  }
-
-
-
-  public static function filter_select()
-  {
-
-	// is this shown ? ##
-	$show_input_text = core::properties( 'show_input_text' );
-
-	if ( ! $show_input_text ) {
-
-		return false;
-
 	}
+
+
+
+	public static function filter_select()
+	{
+
+		// is this shown ? ##
+		$show_input_text = core::properties( 'show_input_text' );
+
+		if ( ! $show_input_text ) {
+
+			return false;
+
+		}
 
 ?>
-	<div class="input text input-searcher">
-		<input type="text" value="" name="q-search-input" id="q-search-input" placeholder="<?php _e("Keyword", 'q-search' ); ?>" class="q-search-input filter-selected" />
-	</div>
+		<div class="input text input-searcher">
+			<input type="text" value="" name="q-search-input" id="q-search-input" placeholder="<?php _e("Keyword", 'q-search' ); ?>" class="q-search-input filter-selected" />
+		</div>
 <?php
 
-  }
+  	}
 
 
 
-  /**
-   * Buid pagination
-   *
-   * @since       1.4.0
-   * @return      String      HTML for pagination
-   */
-  public static function pageination( $total_posts, $posts_per_page, $posted )
-  {
+	/**
+	 * Buid pagination
+	 *
+	 * @since       1.4.0
+	 * @return      String      HTML for pagination
+	 */
+	public static function pageination( $total_posts, $posts_per_page, $posted )
+	{
 
-    // helper::log( 'Device:'. $posted["device"] );
+		// helper::log( 'Device:'. $posted["device"] );
 
-    // handheld ##
-    if ( 'handheld' == $posted["device"] ) {
+		// handheld ##
+		if ( 'handheld' == $posted["device"] ) {
 
-      self::pageination_handheld( $total_posts, $posts_per_page, $posted );
+			self::pageination_handheld( $total_posts, $posts_per_page, $posted );
 
-    } else {
+		} else {
 
-      self::pageination_desktop( $total_posts, $posts_per_page, $posted );
+			self::pageination_desktop( $total_posts, $posts_per_page, $posted );
 
-    }
+		}
 
-  }
-
-
+	}
 
 
 
-  /**
-   * handheld pagination
-   *
-   * @since       1.4.0
-   * @return      String      HTML for pagination
-   */
-  public static function pageination_handheld( $total_posts, $posts_per_page )
-  {
+
+
+	/**
+	 * handheld pagination
+	 *
+	 * @since       1.4.0
+	 * @return      String      HTML for pagination
+	 */
+	public static function pageination_handheld( $total_posts, $posts_per_page )
+	{
 
     // helper::log( 'Loading Handheld Pagination..' );
 
-    ?>
+?>
     <nav class="q-search-pagination">
-      <div class="pagination-inner">
-        <?php
+      	<div class="pagination-inner">
+<?php
 
-        if( $_POST && isset($_POST['paged']) && $_POST['paged'] > 1 ) {
+		if( $_POST && isset($_POST['paged']) && $_POST['paged'] > 1 ) {
 
-          $page_number = $_POST['paged'];
+          	$page_number = $_POST['paged'];
 
-          ?>
-          <a href='#' class='page-numbers pagelink-1 pagelink' rel="1"><span>First</span></a>
-          <a class="paginationNav page-numbers prev" rel="prev" href="#"><span>&lsaquo;</span></a>
-          <?php
+?>
+			<a href='#' class='page-numbers pagelink-1 pagelink' rel="1"><span>First</span></a>
+			<a class="paginationNav page-numbers prev" rel="prev" href="#"><span>&lsaquo;</span></a>
+<?php
 
         } else {
 
-          $page_number = 1;
+          	$page_number = 1;
 
-          ?>
-          <a href='#' class='disabled page-numbers' rel=""><span>First</span></a>
-          <a class="disabled prev" rel="" href="#"><span>&lsaquo;</span></a>
-          <?php
+?>
+			<a href='#' class='disabled page-numbers' rel=""><span>First</span></a>
+			<a class="disabled prev" rel="" href="#"><span>&lsaquo;</span></a>
+<?php
 
         }
 
@@ -498,169 +489,169 @@ class theme extends \q_search {
 
         // check if we need to print pagination ##
         if (
-          // ( $posts_per_page * $page_number ) < $total_posts
-          // && $posts_per_page < $total_posts
-            $page_number >= $total_pages
+			// ( $posts_per_page * $page_number ) < $total_posts
+			// && $posts_per_page < $total_posts
+			$page_number >= $total_pages
         ) {
 
-          ?>
-          <a class="disabled page-numbers" rel="" href="#"><span><?php _e( "Next", 'q-search' ); ?> &rsaquo;</span></a>
-          <a href='#' class='disabled page-numbers' rel=""><span>Last</span></a>
-          <?php
+?>
+			<a class="disabled page-numbers" rel="" href="#"><span><?php _e( "Next", 'q-search' ); ?> &rsaquo;</span></a>
+			<a href='#' class='disabled page-numbers' rel=""><span>Last</span></a>
+<?php
 
         } else {
 
-          ?>
-          <a class="paginationNav page-numbers next" rel="next" href="#"><span><?php _e( "Next", 'q-search' ); ?> &rsaquo;</span></a>
-          <a href='#' class='page-numbers pagelink-<?php echo $total_pages; ?> pagelink' rel="<?php echo $total_pages; ?>"><span>Last</span></a>
-          <?php
+?>
+			<a class="paginationNav page-numbers next" rel="next" href="#"><span><?php _e( "Next", 'q-search' ); ?> &rsaquo;</span></a>
+			<a href='#' class='page-numbers pagelink-<?php echo $total_pages; ?> pagelink' rel="<?php echo $total_pages; ?>"><span>Last</span></a>
+<?php
 
         }
 
-        ?>
-        <div class="clear"></div>
-      </div>
-    </nav>
-    <?php
+?>
+        	<div class="clear"></div>
+      	</div>
+	</nav>
+<?php
 
-  }
+  	}
 
 
 
-  /**
-   * desktop pagination
-   *
-   * @since       1.4.0
-   * @return      String      HTML for pagination
-   */
-  public static function pageination_desktop( $total_posts, $posts_per_page )
-  {
+	/**
+	 * desktop pagination
+	 *
+	 * @since       1.4.0
+	 * @return      String      HTML for pagination
+	 */
+	public static function pageination_desktop( $total_posts, $posts_per_page )
+	{
 
     // helper::log( 'Loading Desktop Pagination..' );
 
-    ?>
+?>
     <nav class="q-search-pagination">
-      <div class="pagination-inner">
-        <?php
+      	<div class="pagination-inner">
+<?php
 
         if( $_POST && isset($_POST['paged']) && $_POST['paged'] > 1 ) {
 
-          $page_number = $_POST['paged'];
+			$page_number = $_POST['paged'];
 
-          ?>
-          <a class="paginationNav page-numbers prev" rel="prev" href="#"><span>&lsaquo;</span></a>
-          <?php
+?>
+			<a class="paginationNav page-numbers prev" rel="prev" href="#"><span>&lsaquo;</span></a>
+<?php
 
         } else {
 
-          $page_number = 1;
+          	$page_number = 1;
 
         }
 
-        ?>
+?>
         <span class="qs-pages page-numbers-wrapper">
 <?php
 
-#Q_Control::log( $posts_per_page );
+	#helper::log( $posts_per_page );
 
-// get paging info ##
-$pagination = core::get_pagination( $total_posts, $posts_per_page, $page_number );
-#helper::log( $pagination );
+	// get paging info ##
+	$pagination = core::get_pagination( $total_posts, $posts_per_page, $page_number );
+	#helper::log( $pagination );
 
-// limit number of items shown on screen ##
-$max = 7;
+	// limit number of items shown on screen ##
+	$max = 7;
 
-// work out how many filler links to allow in between next and back arrows ##
-if( $pagination['page_number'] < $max ) {
+	// work out how many filler links to allow in between next and back arrows ##
+	if( $pagination['page_number'] < $max ) {
 
-  // current page is lower than max pages allowed to be shown ##
-  $sp = 1;
+		// current page is lower than max pages allowed to be shown ##
+		$sp = 1;
 
-} elseif ( $pagination['page_number'] >= ( $pagination['pages'] - floor( $max / 2 ) ) ) {
+	} elseif ( $pagination['page_number'] >= ( $pagination['pages'] - floor( $max / 2 ) ) ) {
 
-  // the current page is greater or equal to half the max number allowed to be shown ##
-  // current = 1, total pages = 6 - 2 = 4
-  // current = 5, total pages = 6 - 2 = 4 - $sp = 4
-  $sp = $pagination['pages'] - $max + 1;
+		// the current page is greater or equal to half the max number allowed to be shown ##
+		// current = 1, total pages = 6 - 2 = 4
+		// current = 5, total pages = 6 - 2 = 4 - $sp = 4
+		$sp = $pagination['pages'] - $max + 1;
 
-} elseif( $pagination['page_number'] >= $max ) {
+	} elseif( $pagination['page_number'] >= $max ) {
 
-  // current page is equal or greater than max ##
-  // 1 >= 3 = false
-  // 5 >= 3 = true - $sp = 3
-  $sp = $pagination['page_number'] - floor( $max / 2 );
+		// current page is equal or greater than max ##
+		// 1 >= 3 = false
+		// 5 >= 3 = true - $sp = 3
+		$sp = $pagination['page_number'] - floor( $max / 2 );
 
-}
+	}
 
-#Q_Control::log( '$sp: '.$sp );
+	#helper::log( '$sp: '.$sp );
 
-// If the current page >= $max then show link to 1st page
-if ( $pagination['page_number'] >= $max ) {
+	// If the current page >= $max then show link to 1st page
+	if ( $pagination['page_number'] >= $max ) {
 
-  ?>
-  <a href='#' class='page-numbers pagelink-1 pagelink' rel="1">1</a><a href='#' class="page-numbers dots">&#8230;</a>
-  <?php
+?>
+  		<a href='#' class='page-numbers pagelink-1 pagelink' rel="1">1</a><a href='#' class="page-numbers dots">&#8230;</a>
+<?php
 
-}
+	}
 
-// Loop though max number of pages shown and show links either side equal to $max / 2 -->
-for( $i = $sp; $i <= ($sp + $max -1); $i++ ) {
+	// Loop though max number of pages shown and show links either side equal to $max / 2 -->
+	for( $i = $sp; $i <= ($sp + $max -1); $i++ ) {
 
-  // skip ##
-  if($i > $pagination['pages'])
-    continue;
+		// skip ##
+		if( $i > $pagination['pages']) {
 
-  // current ##
-  if ( $pagination['page_number'] == $i ) {
+			continue;
 
-    ?>
-    <a href="#" class="page-numbers pagelink-<?php echo $i; ?> pagelink current" rel="<?php echo $i; ?>"><?php echo $i; ?></a>
+		}
 
-    <?php
+		// current ##
+		if ( $pagination['page_number'] == $i ) {
 
-    // normal ##
-  } else {
+?>
+   	 	<a href="#" class="page-numbers pagelink-<?php echo $i; ?> pagelink current" rel="<?php echo $i; ?>"><?php echo $i; ?></a>
+<?php
 
-    ?>
+    	// normal ##
+	  	} else {
 
-    <a href='#' class="page-numbers pagelink-<?php echo $i; ?> pagelink" rel="<?php echo $i; ?>"><?php echo $i; ?></a>
+?>
+    	<a href='#' class="page-numbers pagelink-<?php echo $i; ?> pagelink" rel="<?php echo $i; ?>"><?php echo $i; ?></a>
+<?php
 
-    <?php
+  		}
 
-  }
+	}
 
-}
+	// If the current page is less than the last page minus $max pages divided by 2 ##
+	if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) ) {
 
-// If the current page is less than the last page minus $max pages divided by 2 ##
-if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) ) {
+?>
+  		<span class="page-numbers dots">&#8230;</span>
+		<a href='#' class="page-numbers pagelink-<?php echo $pagination['pages']; ?> pagelink" rel="<?php echo $pagination['pages']; ?>"><?php echo $pagination['pages']; ?></a>
+<?php
 
-  ?>
-  <span class="page-numbers dots">&#8230;</span>
-  <a href='#' class="page-numbers pagelink-<?php echo $pagination['pages']; ?> pagelink" rel="<?php echo $pagination['pages']; ?>"><?php echo $pagination['pages']; ?></a>
-  <?php
-
-}
+	}
 
 ?>
         </span>
-        <?php
+<?php
 
-        // check if we need to print pagination ##
-        if ( ( $posts_per_page * $page_number ) < $total_posts && $posts_per_page < $total_posts ) {
+		// check if we need to print pagination ##
+		if ( ( $posts_per_page * $page_number ) < $total_posts && $posts_per_page < $total_posts ) {
 
-          ?>
-          <a class="paginationNav page-numbers next" rel="next" href="#"><span>&rsaquo;</span></a>
-          <?php
+?>
+		<a class="paginationNav page-numbers next" rel="next" href="#"><span>&rsaquo;</span></a>
+<?php
 
         } // pagination check ##
 
-        ?>
-        <div class="clear"></div>
-      </div>
+?>
+        	<div class="clear"></div>
+      	</div>
     </nav>
-    <?php
+<?php
 
-  }
+	}
 
 
 
@@ -675,13 +666,13 @@ if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) )
   protected static function create_progress_bar()
   {
 
-    ?>
+?>
     <div id='ajax-loader' style="display:none">
-      <div id='progbar-container'>
-        <div id='progbar'></div>
-      </div>
+		<div id='progbar-container'>
+			<div id='progbar'></div>
+		</div>
     </div>
-    <?php
+<?php
 
   }
 
@@ -707,18 +698,18 @@ if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) )
     // get the page's current taxonomy to filter
     if( isset( $queried_object->term_id ) ) {
 
-      $queried_object_string = $queried_object->taxonomy."##".$queried_object->term_id;
+      	$queried_object_string = $queried_object->taxonomy."##".$queried_object->term_id;
 
     } else {
 
-      $queried_object_string = "qs_null";
+      	$queried_object_string = "qs_null";
 
     }
 
     // create nonce ##
     $nonce = \esc_js( \wp_create_nonce( 'q-search-nonce' ) );
 
-    ?>
+?>
     <script type="text/javascript">
 
         // configure QS_Filters ##
@@ -741,21 +732,21 @@ if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) )
         };
 
     </script>
-    <?php
+<?php
 
-  }
+  	}
 
 
 
-  /**
-   * Count total returned posts
-   *
-   * @since   0.4
-   * @param   integer     $count
-   * @return  string      HTML
-   */
-  public static function count_results( $count = 0 )
-  {
+	/**
+	 * Count total returned posts
+	 *
+	 * @since   0.4
+	 * @param   integer     $count
+	 * @return  string      HTML
+	 */
+	public static function count_results( $count = 0 )
+	{	
 
 		// helper::log( core::properties( 'results', 'array' ) );
 
@@ -766,7 +757,7 @@ if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) )
 			,   intval( $count ) > 1 ? core::properties( 'results', 'array' )[1] : core::properties( 'results', 'array' )[0]
 		);
 
-  }
+  	}
 
 
 

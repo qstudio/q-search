@@ -627,7 +627,7 @@ class core extends \q_search {
             
             // helper::log( 'loading pagination..' );
 
-//            theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
+            // theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
 
         }
 
@@ -636,6 +636,7 @@ class core extends \q_search {
         // reset global post object ##
         \wp_reset_query();
         theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
+
     }
 
 

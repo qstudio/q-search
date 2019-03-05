@@ -153,16 +153,16 @@
                     // append new results ##
                     $('#q-search-results').append(html);
 
-                    $('#q-search #ajax-content > .count-results').hide();
-                    var count = $('#q-search #q-search-results > .count-results').html();
-                    // console.log( 'count: '+ count );
+                    $('.q-search-count-results').hide();
+                    var count = $('.q-search-count-results').html();
+                    console.log( 'count: '+ count );
 
-                    $('#q-search #q-search-results > .count-results').remove();
+                    // $('.q-search-count-results').remove();
 
                     if ( count !== undefined && count.length > 0 ) {
 
-                        // console.log( 'show count triggered...' );
-                        $('#q-search #ajax-content > .count-results').html(count).show();
+                        console.log( 'show count triggered...' );
+                        $('.q-search-count-results').html(count).show();
 
                     }
 

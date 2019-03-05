@@ -757,14 +757,14 @@ if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) )
   public static function count_results( $count = 0 )
   {
 
-    // helper::log( core::properties( 'results', 'array' ) );
+		// helper::log( core::properties( 'results', 'array' ) );
 
-    printf (
-        '<h5 class="push-40 count-results" data-count="%d">%d %s</h5>'
-        ,   intval( $count )
-        ,   intval( $count )
-        ,   intval( $count ) > 1 ? core::properties( 'results', 'array' )[1] : core::properties( 'results', 'array' )[0]
-    );
+		printf (
+			'<h5 class="push-40 q-search-count-results" data-count="%d">%d %s</h5>'
+			,   intval( $count )
+			,   intval( $count )
+			,   intval( $count ) > 1 ? core::properties( 'results', 'array' )[1] : core::properties( 'results', 'array' )[0]
+		);
 
   }
 

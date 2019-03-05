@@ -3,7 +3,7 @@ Contributors: qlstudio
 Tags: filter, search, AJAX, posts, taxonomies
 Requires at least: 3
 Tested up to: 3.8.1
-Stable tag: 3.0.2
+Stable tag: 3.0.3
 License: GPL
 
 Filter posts by taxonomies or text search using AJAX to load results

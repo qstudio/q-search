@@ -94,7 +94,7 @@
                 }
                 if ( id ) arr.push(id);
             });
-            console.dir( arr );
+            // console.dir( arr );
             return arr;
 
         },
@@ -155,13 +155,13 @@
 
                     $('.q-search-count-results').hide();
                     var count = $('.q-search-count-results').html();
-                    console.log( 'count: '+ count );
+                    // console.log( 'count: '+ count );
 
                     // $('.q-search-count-results').remove();
 
                     if ( count !== undefined && count.length > 0 ) {
 
-                        console.log( 'show count triggered...' );
+                        // console.log( 'show count triggered...' );
                         $('.q-search-count-results').html(count).show();
 
                     }

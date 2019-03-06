@@ -197,18 +197,13 @@ class theme extends \q_search {
   public static function results( $load = false )
   {
 
-    // update load varaible ##
-    #$this->load = $load;
-
-    ?>
+?>
     <div id="ajax-content">
-<!--      <h1 class="entry-title"></h1>-->
-<!--      <p class="count-results"></p>-->
       	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'posts' ); ?>">
 <?php
 
-        // run load query ##
-        core::query([ 'load' => true ]);
+			// run load query ##
+			core::query([ 'load' => true ]);
 
 ?>
       	</div>
@@ -761,32 +756,30 @@ class theme extends \q_search {
 
 
 
-  /**
-   * Buid No Results
-   *
-   * @since       1.4.0
-   * @return      String      HTML for sad face :(
-   */
-  public static function no_results( $string = null )
-  {
+	/**
+	 * Buid No Results
+	 *
+	 * @since       1.4.0
+	 * @return      String      HTML for sad face :(
+	 */
+	public static function no_results( $string = null )
+	{
 
-    // allow message to be passed ##
-    $message = ! is_null( $string ) ? $string : core::properties( 'no_results' ) ;
+		// allow message to be passed ##
+		$message = ! is_null( $string ) ? $string : core::properties( 'no_results' ) ;
 
-    ?>
+?>
     <div class="no-results text-center">
-        <?php
-          echo '<img class="push-20" src="'.helper::get( "theme/css/images/search-no-results.svg", 'return' ).'" />';
-          echo "<h5 class='push-20'>$message</h5>";
-          echo "<div>Sorry, that filter combination has no results.</div>";
-          echo "<div>Please try different criteria.</div>"
-        ?>
+		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
+		<h5 class='push-20'><?php echo $message; ?></h5>
+		<div>Sorry, that filter combination has no results.</div>
+		<div>Please try different criteria.</div>
     </div>
-    <?php
+<?php
 
-    exit; // stop running now ##
+    	exit; // stop running now ##
 
-  }
+  	}
 
 
 }

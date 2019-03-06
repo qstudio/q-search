@@ -129,6 +129,9 @@
 
                 beforeSend: function () {
 
+                    // remove result count ##
+                    $('.q-search-count-results').remove();
+
                     doing_ajax = true;
                     // self.loader.fadeIn();
                     self.section.animate({
@@ -163,6 +166,10 @@
 
                         // console.log( 'show count triggered...' );
                         $('.q-search-count-results').html(count).show();
+
+                        // move up one level ##
+                        $results = $('.q-search-count-results');
+                        $results.insertBefore( $results.parent() );
 
                     }
 
@@ -494,6 +501,10 @@
             this.selected_filters = this.opts['selected_filters'];
 
             // $title_default = document.getElementsByTagName("title")[0].innerHTML;
+
+            // move results ##
+            $results = $('.q-search-count-results');
+            $results.insertBefore( $results.parent() );
 
             // Run the methods.
             this.clicker();

@@ -555,6 +555,9 @@ class core extends \q_search {
 
         if ( $qs_query->have_posts() ) {
 
+            // log ##
+            // helper::log( 'Posts found, continue..' );
+
             // show results count ##
             theme::count_results( $qs_query->found_posts );
             // helper::log( $qs_query );
@@ -623,19 +626,18 @@ class core extends \q_search {
 
         }
 
-        if( $args['pagination'] ) {
-            
-            // helper::log( 'loading pagination..' );
-
-            // theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
-
-        }
-
         // helper::log( 'Looped: '.$count );
 
         // reset global post object ##
         \wp_reset_query();
-        theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
+
+        // build pagination ##
+        if( $args['pagination'] ) {
+
+            // build pageination ##
+            theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
+
+        }
 
     }
 

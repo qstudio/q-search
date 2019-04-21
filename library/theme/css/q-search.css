@@ -449,6 +449,7 @@ body.handheld #q-search #ajax-filtered-section .pagination {
 .q-search-pagination .page-numbers {
   border: 1px solid #e9eaea;
   color: #363637;
+  line-height: initial;
   padding: 5px 10px;
 }
 
@@ -525,4 +526,7 @@ div.ajax-button.on {
 }
 
 @media (max-width: 767px) {
+    .q-search-pagination a, .q-search-pagination .page-numbers {
+        /*font-size: 14px;*/
+    }
 }

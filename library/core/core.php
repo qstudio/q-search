@@ -41,6 +41,8 @@ class core extends \q_search {
         $config["args"]             = \apply_filters( 'q/search/args', false ); // additional args passed to render method ##
         $config["application"]      = \apply_filters( 'q/search/application', 'general' ); // for filtering via ajax ##
         $config["device"]           = \apply_filters( 'q/search/device', helper::get_device() ); // for device check via ajax ##
+        $config["grid_input"]       = \apply_filters( 'q/search/grid/input', 'col-md-4 col-12' ); // grid layout ##
+        $config["grid_select"]      = \apply_filters( 'q/search/grid/select', 'col-md-8 col-12' ); // grid layout ##
         // $config["load"]             = \apply_filters( 'q/search/load', false ); // default to non-loading state ##
         // $config["load_method"]      = \apply_filters( 'q/search/load_method', 'sticky' ); // loading state method ##
         $config["post_type"]        = \apply_filters( 'q/search/post_type', 'post' );
@@ -51,6 +53,7 @@ class core extends \q_search {
         $config["order"]            = \apply_filters( 'q/search/order', 'DESC' );
         $config["order_by"]         = \apply_filters( 'q/search/order_by', 'date' );
         $config["meta_key"]         = \apply_filters( 'q/search/meta_key', false ); // for wp_user_query ordering ##
+        $config['user_meta']        = \apply_filters( 'q/search/user_meta', false ); // allow for user_meta filter ##
         $config["filter_type"]      = \apply_filters( 'q/search/filter_type', 'select' );
         $config["filter_position"]  = \apply_filters( 'q/search/filter_position', 'top' );
         $config["show_count"]       = \apply_filters( 'q/search/show_count', 0 );
@@ -346,8 +349,10 @@ class core extends \q_search {
         // $filters = '';
         $filters = isset( $posted['_POST_filters'] ) ? array_filter( $posted['_POST_filters'] ) : '' ;
 
+        // helper::log( $filters );
+
         // counter ##
-        $c = 0;
+        // $c = 0;
 
         // check that the array isn't blank ##
 //        if (
@@ -464,7 +469,7 @@ class core extends \q_search {
     {
 
         // check args ##
-        #helper::log( $args );
+        // helper::log( $args );
 
         // new WP_Query ##
         $qs_query = new \WP_User_Query( $args );
@@ -784,6 +789,19 @@ class core extends \q_search {
                         $args['s'] = $value;
 
                     }
+
+                // user_meta ##
+                } elseif ( 
+                    $key == 'user_meta' 
+                    && 'users' == core::properties( 'table' )
+                    && $user_meta = \apply_filters( 'q/search/user_meta', false )
+                ) {
+
+                    // get user_meta settings ##
+                    $user_meta = \apply_filters( 'q/search/user_meta', false );
+                    
+                    $args['meta_key'] = $user_meta['field'];
+                    $args['meta_value'] = $value;
 
                 // taxonomy filtering ##
                 } else {

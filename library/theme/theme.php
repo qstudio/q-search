@@ -249,12 +249,6 @@ class theme extends \q_search {
 		// text input ##
 		echo self::filter_input();
 
-		// check for user_meta filters ##
-		echo self::user_meta();
-
-		// select grid ##
-		$grid = core::properties( 'grid_select' );
-
 		$queried_object = \get_queried_object();
 		// helper::log($taxonomies);
 
@@ -292,9 +286,9 @@ class theme extends \q_search {
 			// select or list items ? ##
 			if( $taxonomy != 'mos_interest' ) {
 
-				echo "<div class='".$grid."'>"; 
-				echo "<div class='selector'>";
-				// echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
+				echo "<div class='col-md-8 col-12'>";
+				echo "<div class=''>";
+				echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
 				echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
 				
 				// check for preselect option ##
@@ -385,13 +379,10 @@ class theme extends \q_search {
 
 		}
 
-		// filter grid ##
-		$grid = core::properties( 'grid_input' );
-
 		$markup = '
-			<div class="input text input-searcher '.$grid.'">
-				<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
-			</div>
+		<div class="input text input-searcher col-md-4 col-12">
+			<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
+		</div>
 		';
 
 		// filter ##
@@ -401,122 +392,25 @@ class theme extends \q_search {
 
 
 
-	public static function user_meta()
+	public static function filter_select()
 	{
 
 		// is this shown ? ##
-		$user_meta = \apply_filters( 'q/search/user_meta', false );
+		$show_input_text = core::properties( 'show_input_text' );
 
-		if ( 
-			! $user_meta 
-			|| ! is_array( $user_meta ) // should be passed as an array ##
-		) {
+		if ( ! $show_input_text ) {
 
 			return false;
 
 		}
 
-		// filter grid ##
-		$grid = core::properties( 'input' == $user_meta['input'] ? 'grid_input' : 'grid_select' );
-
-		// we need to get all the options values to loop over and show ##
-		$options = $user_meta['options'];
-
-		if (
-			! $options
-			|| ! is_array( $options )
-		) {
-
-			helper::log( 'No valid options passed to display' );
-
-			return false;
-
-		}
-
-		$markup = "
-		<div class='{$grid}'> 
-			<div class='selector'>
-				<select name='user_meta' class='form-control q-search-select filter-user-meta'>
-					<option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
-					".self::select_options( [
-						'markup' 	=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
-					   'options'	=> $options,
-					   'args'		=> $user_meta,
-					   'filter'		=> 'user_meta' // for filter ##
-					] )."
-				</select>
-			</div>
-		</div>";
-
-		// filter ##
-		return \apply_filters( 'q/search/filter/user_meta', $markup );
-	
-	}
-
-
-
-	public static function filter_select()
-	{
-	
-		// filter grid ##
-		$grid = core::properties( 'grid_select' );
-
-		$markup = 
-		"<div class='{$grid}'> 
-		   <div class='selector'>
-			   <select name='user_meta' class='form-control q-search-select filter-user-meta'>
-				   <option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
-				   ".self::select_options( [
-					   'markup' 	=> '<option value="%key%" data-tax="%field%=%key%" >',
-					   'options'	=> $options,
-					   'args'		=> $user_meta,
-					   'filter'		=> 'user_meta' // for filter ##
-				   ] )."
-			   </select>
-		   </div
-	   </div>";
-
-		// filter ##
-		return \apply_filters( 'q/search/filter/select', $markup );
+?>
+		<div class="input text input-searcher">
+			<input type="text" value="" name="q-search-input" id="q-search-input" placeholder="<?php _e("Keyword", 'q-search' ); ?>" class="q-search-input filter-selected" />
+		</div>
+<?php
 
   	}
-
-
-
-	public static function select_options( Array $args = null )
-	{
-
-		// sanity ##
-		if (
-			is_null( $args )
-			|| ! is_array( $args )
-			|| ! isset( $args['markup'] )
-			|| ! isset( $args['options'] )
-			|| ! is_array( $args['options'] )
-			|| ! isset( $args['args'] )
-			|| ! isset( $args['args']['field'] )
-		) {
-
-			helper::log( 'Malformed data passed to method' );
-
-			return false;
-
-		}
-
-		// strart empty ##
-		$string = '';
-
-		// loop over each option, add markup ##
-		foreach( $args['options'] as $key => $value ) {
-
-			$string .= str_replace( [ '%key%', '%field%', '%value%' ], [ $key, $args['args']['field'], $value ], $args['markup'] );
-
-		}
-
-		// return failtered string ##
-		return \apply_filters( 'q/search/select_options/'.$args['filter'], $string );
-
-	}  
 
 
 
@@ -878,7 +772,7 @@ class theme extends \q_search {
     <div class="no-results text-center">
 		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message; ?></h5>
-		<div>Sorry, that filter combination returned no results.</div>
+		<div>Sorry, that filter combination has no results.</div>
 		<div>Please try different criteria.</div>
     </div>
 <?php

@@ -88,6 +88,14 @@ if ( ! class_exists( 'q_search' ) ) {
             // load properties ##
             #self::load_properties();
 
+            // define debug ##
+            self::$debug = 
+                ( true === self::$debug ) ? 
+                true : 
+                class_exists( 'Q' ) ? 
+                    \Q::$debug : // use Q debug setting, as plugin property not active ##
+                    false ;
+
             // load libraries ##
             self::load_libraries();
 

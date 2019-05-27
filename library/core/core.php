@@ -47,6 +47,8 @@ class core extends \q_search {
         $config["taxonomies"]       = \apply_filters( 'q/search/taxonomies', 'category,post_tag' );
         $config["posts_per_page"]   = \apply_filters( 'q/search/posts_per_page', get_option( "posts_per_page", 10 ) );
         $config["class"]            = \apply_filters( 'q/search/class', 'q_search' );
+        $config["grid_input"]       = \apply_filters( 'q/search/grid/input', 'col-md-4 col-12' );
+        $config["grid_select"]      = \apply_filters( 'q/search/grid/select', 'col-md-8 col-12' );
         $config["callback"]         = \apply_filters( 'q/search/callback', false );
         $config["order"]            = \apply_filters( 'q/search/order', 'DESC' );
         $config["order_by"]         = \apply_filters( 'q/search/order_by', 'date' );

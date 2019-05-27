@@ -11,7 +11,7 @@ use q\search\core\core as core;
 
 class theme extends \q_search {
 
-  public static function run()
+	public static function run()
   {
 
     // image sizes ##
@@ -127,25 +127,25 @@ class theme extends \q_search {
 	public static function no_posts()
 	{
 
-    // grab global $post;
-    global $post;
-    #pr( $post );
+		// grab global $post;
+		global $post;
+		#pr( $post );
 
-    // check for post_meta field containing string for message ##
-    if ( $post && $post->q_search_no_results ) {
+		// check for post_meta field containing string for message ##
+		if ( $post && $post->q_search_no_results ) {
 
-		#pr( 'Found string..' );
-		$message = $post->q_search_no_results;
+			#pr( 'Found string..' );
+			$message = $post->q_search_no_results;
 
-    } else {
+		} else {
 
-		// allow message to be passed ##
-		$message = __( "No Results Found", 'q-search' ) ;
+			// allow message to be passed ##
+			$message = __( "No Results Found", 'q-search' ) ;
 
-    }
+		}
 
 ?>
-    <p class="no-results"><?php echo $message; ?></p>
+	    <p class="no-results"><?php echo $message; ?></p>
 <?php
 
 	}
@@ -173,16 +173,16 @@ class theme extends \q_search {
         <a href="%permalink%" title="%title%">Read More</a>
     </div>
     */
-    ?>
+?>
     <div class="ajax-loaded  q-search-default">
-      <h3><?php \the_title();?></h3>
-      <a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
-        <?php \the_post_thumbnail(array( 150, 150 )); ?>
-      </a>
-      <p><?php \the_excerpt(); ?></p>
-      <a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
+  	    <h3><?php \the_title();?></h3>
+		<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
+        	<?php \the_post_thumbnail(array( 150, 150 )); ?>
+      	</a>
+      	<p><?php \the_excerpt(); ?></p>
+      	<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
     </div>
-    <?php
+<?php
 
   }
 
@@ -286,10 +286,10 @@ class theme extends \q_search {
 			// select or list items ? ##
 			if( $taxonomy != 'mos_interest' ) {
 
-				echo "<div class='col-md-8 col-12'>";
+				echo "<div class='".core::properties( 'grid_select')."'>";
 				echo "<div class=''>";
-				echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
-				echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
+				// echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
+				echo "<div class='selector'><select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
 				
 				// check for preselect option ##
 				
@@ -313,7 +313,7 @@ class theme extends \q_search {
 
 				}
 
-				echo "</select>";
+				echo "</select></div>";
 				echo "</div></div>";
 
 			} else {
@@ -380,7 +380,7 @@ class theme extends \q_search {
 		}
 
 		$markup = '
-		<div class="input text input-searcher col-md-4 col-12">
+		<div class="input text input-searcher '.core::properties( 'grid_select').'">
 			<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
 		</div>
 		';

@@ -11,13 +11,13 @@ use q\search\core\core as core;
 
 class theme extends \q_search {
 
-  public static function run()
-  {
+	public static function run()
+  	{
 
-    // image sizes ##
-    \add_action( 'after_setup_theme', array( get_class(), 'add_image_sizes' ) );
+		// image sizes ##
+		\add_action( 'after_setup_theme', array( get_class(), 'add_image_sizes' ) );
 
-  }
+	  }
 
 
 

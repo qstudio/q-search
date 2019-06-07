@@ -432,19 +432,19 @@ class theme extends \q_search {
 		}
 
 		$markup = 
-		"<div class='{$grid}'> 
-			<div class='selector'>
-				<select name='user_meta' class='form-control q-search-select filter-user-meta'>
-					<option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
-					".self::select_options( [
-						'markup' 		=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
-					   	'options'		=> $options,
-					   	'args'			=> $user_meta,
-					   	'filter'		=> 'user_meta' // for filter ##
-					] )."
-				</select>
-			</div>
-		</div>";
+			"<div class='{$grid}'> 
+				<div class='selector'>
+					<select name='user_meta' class='form-control q-search-select filter-user-meta'>
+						<option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
+						".self::select_options( [
+							'markup' 		=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
+							'options'		=> $options,
+							'args'			=> $user_meta,
+							'filter'		=> 'user_meta' // for filter ##
+						] )."
+					</select>
+				</div>
+			</div>";
 
 		// filter ##
 		return \apply_filters( 'q/search/filter/user_meta', $markup );
@@ -501,7 +501,7 @@ class theme extends \q_search {
 
 		}
 
-		// strart empty ##
+		// start empty ##
 		$string = '';
 
 		// loop over each option, add markup ##
@@ -511,7 +511,7 @@ class theme extends \q_search {
 
 		}
 
-		// return failtered string ##
+		// return filtered string ##
 		return \apply_filters( 'q/search/select_options/'.$args['filter'], $string );
 
 	}  

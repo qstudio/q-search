@@ -787,6 +787,19 @@ class core extends \q_search {
 
                     }
 
+                // user_meta ##
+                } elseif ( 
+                    $key == 'user_meta' 
+                    && 'users' == core::properties( 'table' )
+                    && $user_meta = \apply_filters( 'q/search/user_meta', false )
+                ) {
+
+                    // get user_meta settings ##
+                    $user_meta = \apply_filters( 'q/search/user_meta', false );
+                    
+                    $args['meta_key'] = $user_meta['field'];
+                    $args['meta_value'] = $value;
+
                 // taxonomy filtering ##
                 } else {
 
@@ -794,14 +807,14 @@ class core extends \q_search {
 
                     if ( ! is_array( $value ) ) { $value = explode(' ', $value); }
 
-                    #pr( $value );
+                    // helper::log( $value );
 
                     foreach( $value as $id ){
                         array_push( $args['tax_query'],
                             array(
-                                'taxonomy' => $key,
-                                'field' => 'id',
-                                'terms' => $id
+                                'taxonomy'  => $key,
+                                'field'     => 'id',
+                                'terms'     => $id
                             )
                         );
                     }

@@ -101,7 +101,7 @@
 
         filter: function (arr) {
 
-            // console.log("running filter");
+            console.log("running filter");
 
             var self = this;
 
@@ -133,12 +133,14 @@
                     $('.q-search-count-results').remove();
 
                     doing_ajax = true;
+                    
                     // self.loader.fadeIn();
                     self.section.animate({
                         'opacity': .0
                     }, 'slow');
+                    
                     $("#q-search .pagination").hide("slow"); // show pagination ##
-                    //self.progress(33);
+                    
                     if ( typeof NProgress !== 'undefined' ) { NProgress.start(); }
                     self.disable(); // disable all selects, inputs and buttons ##
 
@@ -415,50 +417,48 @@
                 // e.preventDefault();
             });
 
-            // $( document ).on('change', this.selects, function (e) {
-            //
-            //     // console.log( 'here..' );
-            //     // console.dir( this.selects );
-            //
-            //     if ( self.running == false ) {
-            //
-            //         //self.first = false; // load normally from now ##
-            //
-            //         // Set to true to stop function chaining.
-            //         self.running = true;
-            //
-            //         // The following line resets the queried_object var so that in an ajax request it page's queried object is ignored.
-            //         QS_CONFIG['queried_object'] = 'qs_null';
-            //
-            //         // remove all selected_filters from options in this <select> ##
-            //         $(this).find('option').removeClass(self.selected_filters);
-            //
-            //         // Cache some of the DOM elements for re-use later in the method.
-            //         var link = $(this),
-            //             parent = link.parent('select'),
-            //             relation = link.attr('rel');
-            //
-            //         $(this).find(':selected').toggleClass(self.selected_filters);
-            //
-            //         QS_CONFIG['page_number'] = 1;
-            //
-            //         if (relation === 'next') {
-            //             QS_CONFIG['page_number']++;
-            //         } else if (relation === 'prev') {
-            //             QS_CONFIG['page_number']--;
-            //         } else if (link.hasClass('pagelink')) {
-            //             QS_CONFIG['page_number'] = relation;
-            //         }
-            //
-            //         console.log($('#q-search-form').serialize());
-            //         console.log(self.selected());
-            //         // self.filter(self.selected());
-            //         self.filter($('#q-search-form').serialize());
-            //     }
-            //
-            //     e.preventDefault();
-            //
-            // });
+            $( document ).on('change', this.selects, function (e) {
+
+                // console.log( 'here..' );
+                // console.dir( this.selects );
+
+                if ( self.running == false ) {
+
+                    //self.first = false; // load normally from now ##
+
+                    // Set to true to stop function chaining.
+                    self.running = true;
+
+                    // The following line resets the queried_object var so that in an ajax request it page's queried object is ignored.
+                    QS_CONFIG['queried_object'] = 'qs_null';
+
+                    // remove all selected_filters from options in this <select> ##
+                    $(this).find('option').removeClass(self.selected_filters);
+
+                    // Cache some of the DOM elements for re-use later in the method.
+                    var link = $(this),
+                        parent = link.parent('select'),
+                        relation = link.attr('rel');
+
+                    $(this).find(':selected').toggleClass(self.selected_filters);
+
+                    QS_CONFIG['page_number'] = 1;
+
+                    if (relation === 'next') {
+                        QS_CONFIG['page_number']++;
+                    } else if (relation === 'prev') {
+                        QS_CONFIG['page_number']--;
+                    } else if (link.hasClass('pagelink')) {
+                        QS_CONFIG['page_number'] = relation;
+                    }
+
+                    self.filter(self.selected());
+
+                }
+
+                e.preventDefault();
+
+            });
 
         },
 

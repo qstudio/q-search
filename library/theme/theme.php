@@ -437,10 +437,10 @@ class theme extends \q_search {
 				<select name='user_meta' class='form-control q-search-select filter-user-meta'>
 					<option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
 					".self::select_options( [
-						'markup' 	=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
-					   'options'	=> $options,
-					   'args'		=> $user_meta,
-					   'filter'		=> 'user_meta' // for filter ##
+						'markup' 		=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
+					   	'options'		=> $options,
+					   	'args'			=> $user_meta,
+					   	'filter'		=> 'user_meta' // for filter ##
 					] )."
 				</select>
 			</div>

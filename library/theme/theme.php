@@ -298,18 +298,17 @@ class theme extends \q_search {
 				echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
 				
 				// check for preselect option ##
-				
 				echo "<option selected value=\"\" class=\"default\">Filter by ".$get_taxonomy["name"]."</option>";
 
 				#wp_die(pr($get_taxonomy["terms"]));
 				
 				foreach( $get_taxonomy["terms"] as $term ) {
 
-            		echo "<option value=\"{$term->term_id}\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\" >";
+					echo "<option value=\"{$term->term_id}\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\" >";
 
-		            echo "{$term->name}";
+					echo "{$term->name}";
 
-        		    if( $show_count == 1 ) {
+					if( $show_count == 1 ) {
 						
 						echo " ({$term->count})";
 			
@@ -388,11 +387,10 @@ class theme extends \q_search {
 		// filter grid ##
 		$grid = core::properties( 'grid_input' );
 
-		$markup = '
-			<div class="input text input-searcher '.$grid.'">
-				<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
-			</div>
-		';
+		$markup = 
+		'<div class="input text input-searcher '.$grid.'">
+			<input type="text" value="" name="searcher" id="searcher" placeholder="Keyword" class="searcher filter-selected" />	
+		</div>';
 
 		// filter ##
 		return \apply_filters( 'q/search/filter/input', $markup );
@@ -433,20 +431,20 @@ class theme extends \q_search {
 
 		}
 
-		$markup = "
-		<div class='{$grid}'> 
-			<div class='selector'>
-				<select name='user_meta' class='form-control q-search-select filter-user-meta'>
-					<option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
-					".self::select_options( [
-						'markup' 	=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
-					   'options'	=> $options,
-					   'args'		=> $user_meta,
-					   'filter'		=> 'user_meta' // for filter ##
-					] )."
-				</select>
-			</div>
-		</div>";
+		$markup = 
+			"<div class='{$grid}'> 
+				<div class='selector'>
+					<select name='user_meta' class='form-control q-search-select filter-user-meta'>
+						<option selected value='' class='default'>Filter by ".$user_meta["label"]."</option>
+						".self::select_options( [
+							'markup' 		=> '<option value="%key%" data-tax="%field%=%key%">%value%</option>',
+							'options'		=> $options,
+							'args'			=> $user_meta,
+							'filter'		=> 'user_meta' // for filter ##
+						] )."
+					</select>
+				</div>
+			</div>";
 
 		// filter ##
 		return \apply_filters( 'q/search/filter/user_meta', $markup );
@@ -474,7 +472,7 @@ class theme extends \q_search {
 				   ] )."
 			   </select>
 		   </div
-	   </div>";
+	   	</div>";
 
 		// filter ##
 		return \apply_filters( 'q/search/filter/select', $markup );
@@ -503,7 +501,7 @@ class theme extends \q_search {
 
 		}
 
-		// strart empty ##
+		// start empty ##
 		$string = '';
 
 		// loop over each option, add markup ##
@@ -513,7 +511,7 @@ class theme extends \q_search {
 
 		}
 
-		// return failtered string ##
+		// return filtered string ##
 		return \apply_filters( 'q/search/select_options/'.$args['filter'], $string );
 
 	}  

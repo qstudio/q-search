@@ -952,7 +952,9 @@ class core extends \q_search {
             $terms = \get_terms( 
                 array(
                     'taxonomy'      => trim($taxonomy),
+                    // 'hierarchical'  => true,
                     'orderby'       => 'name',
+                    'order'         => 'ASC',
                     'hide_empty'    => 1
                 )
             );

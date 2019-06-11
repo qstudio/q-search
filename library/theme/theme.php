@@ -298,7 +298,7 @@ class theme extends \q_search {
 				echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
 				
 				// check for preselect option ##
-				echo "<option selected value=\"\" class=\"default\">Filter by ".$get_taxonomy["name"]."</option>";
+				echo "<option selected value=\"\" class=\"default\">".$get_taxonomy["name"]."</option>";
 
 				#wp_die(pr($get_taxonomy["terms"]));
 				
@@ -324,7 +324,7 @@ class theme extends \q_search {
 			} else {
 
 				echo "<div><div class='tags form-group'>";
-				echo '<div><label>choose interests</label></div>';
+				echo '<div><label>Choose Interests</label></div>';
 
 				foreach( $get_taxonomy["terms"] as $term ) {
 

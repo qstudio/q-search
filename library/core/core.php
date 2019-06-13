@@ -52,6 +52,7 @@ class core extends \q_search {
         $config["callback"]         = \apply_filters( 'q/search/callback', false );
         $config["order"]            = \apply_filters( 'q/search/order', 'DESC' );
         $config["order_by"]         = \apply_filters( 'q/search/order_by', 'date' );
+        $config['role__not_in']     = \apply_filters( 'q/search/role__not_in', [ 'Administrator' ] );
         $config["meta_key"]         = \apply_filters( 'q/search/meta_key', false ); // for wp_user_query ordering ##
         $config["filter_type"]      = \apply_filters( 'q/search/filter_type', 'select' );
         $config["filter_position"]  = \apply_filters( 'q/search/filter_position', 'top' );
@@ -173,7 +174,7 @@ class core extends \q_search {
                 $args = array(
                     'number'                => $posted['posts_per_page'] > 20 ? 20 : intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
                     'post_type'             => 'users', #core::properties( 'post_type' ),
-                    'role__not_in'          => 'Administrator',
+                    'role__not_in'          => self::properties( 'role__not_in' ), // 'Administrator',
                     'meta_key'              => self::properties( 'meta_key' ),
                     'orderby'               => self::properties( 'order_by' ),
                     'order'                 => self::properties( 'order' ) 

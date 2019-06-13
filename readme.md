@@ -3,7 +3,7 @@
 **Tags:** filter, search, AJAX, posts, taxonomies
 **Requires at least:** 4.0
 **Tested up to:** 5.0.0  
-**Stable tag:** 3.1.5
+**Stable tag:** 3.2.0
 **License:** GPL2  
 
 Filter posts by taxonomies or text search using AJAX to load results
@@ -23,6 +23,10 @@ Filter posts by taxonomies or text search using AJAX to load results
 No applicable screenshots
 
 ## Changelog ##
+
+### 3.1.5 ###
+
+* Added role__not_in filters for wp_user queries via filter q/search/role__not_in
 
 ### 3.1.5 ###
 

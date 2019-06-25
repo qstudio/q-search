@@ -45,6 +45,9 @@ class core extends \q_search {
         // $config["load_method"]      = \apply_filters( 'q/search/load_method', 'sticky' ); // loading state method ##
         $config["post_type"]        = \apply_filters( 'q/search/post_type', 'post' );
         $config["taxonomies"]       = \apply_filters( 'q/search/taxonomies', 'category,post_tag' );
+        $config["category_name"]    = \apply_filters( 'q/search/category_name', \get_query_var( 'category_name', '' ) );
+        $config["author_name"]      = \apply_filters( 'q/search/author_name', \get_query_var( 'author_name', '' ) );
+        $config["tag"]              = \apply_filters( 'q/search/tag', \get_query_var( 'tag', '' ) );
         $config["posts_per_page"]   = \apply_filters( 'q/search/posts_per_page', get_option( "posts_per_page", 10 ) );
         $config["class"]            = \apply_filters( 'q/search/class', 'q_search' );
         $config["grid_input"]       = \apply_filters( 'q/search/grid/input', 'col-md-4 col-12' );
@@ -283,6 +286,8 @@ class core extends \q_search {
     public static function get_posted()
     {
 
+        // helper::log( $_POST );
+
         // grab posted data ##
         $posted['table']              = isset( $_POST['table'] ) ? $_POST['table'] : core::properties( 'table' );
         $posted['application']        = isset( $_POST['application'] ) ? $_POST['application'] : core::properties( 'application' );
@@ -292,6 +297,9 @@ class core extends \q_search {
         $posted['class']              = isset( $_POST['class'] ) ? $_POST['class'] : core::properties( 'class' ) ;
         $posted['order']              = isset( $_POST['order'] ) ? $_POST['order'] : core::properties( 'order' ) ;
         $posted['order_by']           = isset( $_POST['order_by'] ) ? $_POST['order_by'] : core::properties( 'order_by' ) ;
+        $posted['category_name']      = isset( $_POST['category_name'] ) ? $_POST['category_name'] : core::properties( 'category_name' ) ;
+        $posted['author_name']        = isset( $_POST['author_name'] ) ? $_POST['author_name'] : core::properties( 'author_name' ) ;
+        $posted['tag']                = isset( $_POST['tag'] ) ? $_POST['tag'] : core::properties( 'tag' ) ;
 
         // helper::log( isset( $_POST['filters'] ) ? $_POST['filters'] : '' );
 
@@ -530,7 +538,7 @@ class core extends \q_search {
             
             // helper::log( 'loading pagination..' );
 
-            theme::pageination( $qs_query->get_total(), $args['number'], self::get_posted() );
+            theme::pagination( $qs_query->get_total(), $args['number'], self::get_posted() );
 
         }
 
@@ -637,8 +645,8 @@ class core extends \q_search {
         // build pagination ##
         if( $args['pagination'] ) {
 
-            // build pageination ##
-            theme::pageination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
+            // build pagination ##
+            theme::pagination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
 
         }
 
@@ -710,7 +718,7 @@ class core extends \q_search {
             // helper::log( 'Pagination: '.$pagination );
 
             #helper::log('Running load state query');
-            #helper::log( $args );
+            // helper::log( $args );
 
         } else {
 
@@ -733,6 +741,27 @@ class core extends \q_search {
 
                 }
             }
+
+        }
+
+        // add in category_name, if in query_var ##
+        if ( isset( $posted['category_name'] ) ) {
+
+            $args['category_name'] = $posted['category_name'];
+
+        }
+
+        // add in author_name, if in query_var ##
+        if ( isset( $posted['author_name'] ) ) {
+
+            $args['author_name'] = $posted['author_name'];
+
+        }
+
+        // add in tag, if in query_var ##
+        if ( isset( $posted['tag'] ) ) {
+
+            $args['tag'] = $posted['tag'];
 
         }
 

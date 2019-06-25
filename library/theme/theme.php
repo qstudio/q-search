@@ -173,16 +173,16 @@ class theme extends \q_search {
         <a href="%permalink%" title="%title%">Read More</a>
     </div>
     */
-    ?>
+?>
     <div class="ajax-loaded  q-search-default">
-      <h3><?php \the_title();?></h3>
-      <a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
-        <?php \the_post_thumbnail(array( 150, 150 )); ?>
-      </a>
-      <p><?php \the_excerpt(); ?></p>
-      <a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
+      	<h3><?php \the_title();?></h3>
+		<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
+			<?php \the_post_thumbnail(array( 150, 150 )); ?>
+		</a>
+		<p><?php \the_excerpt(); ?></p>
+		<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
     </div>
-    <?php
+<?php
 
   }
 
@@ -524,19 +524,26 @@ class theme extends \q_search {
 	 * @since       1.4.0
 	 * @return      String      HTML for pagination
 	 */
-	public static function pageination( $total_posts, $posts_per_page, $posted )
+	public static function pagination( $total_posts, $posts_per_page, $posted )
 	{
 
-		// helper::log( 'Device:'. $posted["device"] );
+		// helper::log( 'rebuilding pagination on device:'. $posted["device"] );
 
 		// handheld ##
-		if ( 'handheld' == $posted["device"] ) {
+		switch ( $posted["device"] ) {
 
-			self::pageination_handheld( $total_posts, $posts_per_page, $posted );
+			case ( 'handheld' ) :
 
-		} else {
+				self::pagination_handheld( $total_posts, $posts_per_page, $posted );
 
-			self::pageination_desktop( $total_posts, $posts_per_page, $posted );
+			break ;
+
+			case ( 'desktop' ) :
+			default :
+
+				self::pagination_desktop( $total_posts, $posts_per_page, $posted );
+
+			break ;
 
 		}
 
@@ -552,7 +559,7 @@ class theme extends \q_search {
 	 * @since       1.4.0
 	 * @return      String      HTML for pagination
 	 */
-	public static function pageination_handheld( $total_posts, $posts_per_page )
+	public static function pagination_handheld( $total_posts, $posts_per_page )
 	{
 
     // helper::log( 'Loading Handheld Pagination..' );
@@ -623,7 +630,7 @@ class theme extends \q_search {
 	 * @since       1.4.0
 	 * @return      String      HTML for pagination
 	 */
-	public static function pageination_desktop( $total_posts, $posts_per_page )
+	public static function pagination_desktop( $total_posts, $posts_per_page )
 	{
 
     // helper::log( 'Loading Desktop Pagination..' );
@@ -754,29 +761,6 @@ class theme extends \q_search {
 
 
 
-
-
-  /**
-   * build prog bar function
-   *
-   * @since       1.7.0
-   * @return      string      HTML for progress bar
-   */
-  protected static function create_progress_bar()
-  {
-
-?>
-    <div id='ajax-loader' style="display:none">
-		<div id='progbar-container'>
-			<div id='progbar'></div>
-		</div>
-    </div>
-<?php
-
-  }
-
-
-
   /**
    * Add inline JS to search page
    *
@@ -824,7 +808,10 @@ class theme extends \q_search {
             order:              '<?php echo core::properties( 'order' ); ?>',
             order_by:           '<?php echo core::properties( 'order_by' ); ?>',
             filter_type:        '<?php echo core::properties( 'filter_type' ); ?>',
-            filter_position:    '<?php echo core::properties( 'filter_position') ; ?>',
+			filter_position:    '<?php echo core::properties( 'filter_position') ; ?>',
+			category_name:      '<?php echo core::properties( 'category_name') ; ?>',
+        	author_name:       	'<?php echo core::properties( 'author_name') ; ?>',
+        	tag:    			'<?php echo core::properties( 'tag') ; ?>',
             queried_object:     '<?php echo $queried_object_string; ?>',
             page_number:        1,
             nonce:              '<?php echo $nonce; ?>'

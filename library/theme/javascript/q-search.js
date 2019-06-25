@@ -122,6 +122,9 @@
                     'template':         QS_CONFIG['template'],
                     'order':            QS_CONFIG['order'],
                     'order_by':         QS_CONFIG['order_by'],
+                    'category_name':    QS_CONFIG['category_name'],
+        	        'author_name':      QS_CONFIG['author_name'],
+        	        'tag':    			QS_CONFIG['tag'],
                     'queried_object':   QS_CONFIG['queried_object'],
                     'paged': 		    QS_CONFIG['page_number'],
                     '_ajax_nonce':      QS_CONFIG['nonce']

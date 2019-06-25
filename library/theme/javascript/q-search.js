@@ -94,14 +94,14 @@
                 }
                 if ( id ) arr.push(id);
             });
-            console.dir( arr );
+            // console.dir( arr );
             return arr;
 
         },
 
         filter: function (arr) {
 
-            console.log("running filter");
+            // console.log("running filter");
 
             var self = this;
 

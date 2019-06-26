@@ -255,7 +255,7 @@ class theme extends \q_search {
 		// select grid ##
 		$grid = core::properties( 'grid_select' );
 
-		helper::log( $grid );
+		// helper::log( $grid );
 
 		$queried_object = \get_queried_object();
 		// helper::log($taxonomies);

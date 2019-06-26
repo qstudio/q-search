@@ -353,56 +353,29 @@ class core extends \q_search {
 
         }
 
+
+        // helper::log( $posted['_POST_filters'] );
+
         // blank ##
         // $filters = '';
-        $filters = isset( $posted['_POST_filters'] ) ? array_filter( $posted['_POST_filters'] ) : '' ;
+        $filters = 
+            isset( $posted['_POST_filters'] ) ? 
+            array_filter( $posted['_POST_filters'] ) : 
+            false ;
+
+        // if $filters is an rmpty array, let's kick back false  #
+        if ( empty( $filters ) ) {
+
+            // helper::log( 'Nothing interesting in filters..' );
+
+            $filters = false;
+
+        } 
 
         // counter ##
-        $c = 0;
+        // $c = 0;
 
-        // check that the array isn't blank ##
-//        if (
-//            isset( $posted['_POST_filters'] )
-//            && $posted['_POST_filters'][0] != ""
-//        ) {
-//
-//            // this while loop puts the filters in a usable array ##
-//            while( $c < count( $posted['_POST_filters'] ) ) {
-//
-//                #helper::log("single string: ".$posted['_POST_filters'][$c] )
-//
-//                // explode string to array ##
-//                $string = explode( '=', $posted['_POST_filters'][$c] );
-//
-//                // check string set ##
-//                if ( ! $string[1] || is_null( $string[1] ) || $string[1] == '' ) {
-//
-//                    #helper::log("skipping: <?php echo $string[0] )
-//
-//                // string not empty ##
-//                } else {
-//
-//                    #helper::log("string[0]: <?php echo $string[0] )
-//                    #helper::log("string[1]: <?php echo $string[1] )
-//
-//                    if ( isset( $string[0] ) ) {
-//
-//                        // add items to array ##
-//                        $filters[$string[0]] = $string[1];
-//
-//                    }
-//
-//                }
-//
-//                // iterate ##
-//                $c++;
-//
-//            }
-//
-//            // clean up empty items ##
-//            $filters = array_filter( (array)$filters );
-//        }
-
+        // switch over user cases ##
         switch ( core::properties( 'table' ) ) {
             
             // allow for searching users ##
@@ -576,7 +549,10 @@ class core extends \q_search {
 
             // helper::log( $args );
 
-            while ( $qs_query->have_posts() ) {
+            while ( 
+                $qs_query->have_posts() 
+                && $count < $args['posts_per_page']    
+            ) {
 
                 $qs_query->the_post();
 
@@ -679,6 +655,7 @@ class core extends \q_search {
 
         // get posted filters ##
         $filters = self::get_filters( $posted );
+        // helper::log( $filters );
 
         // build args list ##
         $args = self::default_args( $posted );
@@ -744,22 +721,31 @@ class core extends \q_search {
 
         }
 
-        // add in category_name, if in query_var ##
-        if ( isset( $posted['category_name'] ) ) {
+        // add in category_name, if in query_var and not set in tax_query... ##
+        if ( 
+            isset( $posted['category_name'] )
+            && ! $filters
+        ) {
 
             $args['category_name'] = $posted['category_name'];
 
         }
 
         // add in author_name, if in query_var ##
-        if ( isset( $posted['author_name'] ) ) {
+        if ( 
+            isset( $posted['author_name'] ) 
+            && ! $filters
+        ) {
 
             $args['author_name'] = $posted['author_name'];
 
         }
 
         // add in tag, if in query_var ##
-        if ( isset( $posted['tag'] ) ) {
+        if ( 
+            isset( $posted['tag'] ) 
+            && ! $filters
+        ) {
 
             $args['tag'] = $posted['tag'];
 
@@ -1138,21 +1124,34 @@ class core extends \q_search {
     * @param type $array
     * @return \stdClass|boolean
     */
-    public static function array_to_object($array)
+    public static function array_to_object( $array )
     {
 
-        if(!is_array($array)) {
+        if( ! is_array( $array ) ) {
+
             return $array;
+
         }
 
         $object = new stdClass();
-        if (is_array($array) && count($array) > 0) {
-            foreach ($array as $name=>$value) {
-                $name = strtolower(trim($name));
-                if (!empty($name)) {
-                $object->$name = self::array_to_object($value);
+
+        if ( 
+            is_array( $array ) 
+            && count( $array ) > 0
+        ) {
+        
+            foreach ( $array as $name => $value ) {
+        
+                $name = strtolower( trim( $name ) );
+        
+                if ( ! empty( $name ) ) {
+
+                    $object->$name = self::array_to_object( $value );
+
                 }
+
             }
+
             return $object;
         }
         else {
@@ -1178,6 +1177,43 @@ class core extends \q_search {
 
         // kick it back ##
         return $array;
+
+    }
+
+
+
+    public static function multi_array_key_exists( array $array, $key ) {
+
+        helper::log( $array );
+
+        // is in base array?
+        if ( array_key_exists( $key, $array ) ) {
+
+            helper::log( 'Key found top level: '.$key ) ;
+
+            return true;
+
+        }
+    
+        // check arrays contained in this array
+        foreach ( $array as $element ) {
+
+            if ( is_array( $element ) ) {
+
+                if ( self::multi_array_key_exists( $element, $key ) ) {
+
+                    helper::log( 'Key found in deep: '.$key ) ;
+
+                    return true;
+
+                }
+            }
+    
+        }
+    
+        helper::log( 'Key NOT found: '.$key ) ;
+
+        return false;
 
     }
 

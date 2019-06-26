@@ -206,7 +206,7 @@ body.handheld #q-search #ajax-filtered-section .pagination {
     line-height: 16px;
     border: 0;
     padding: 0 0 0 20px;
-    margin: 0 0 0 5gfpx;
+    margin: 10px;
     background: no-repeat left center url('images/icon-reset.svg');
     font-size: 14px;
     width: 110px;
@@ -521,7 +521,7 @@ div.ajax-button.on {
     /*}*/
 
     #q-search .input {
-        text-align: left;
+        text-align: center;
     }
 }
 

@@ -244,12 +244,14 @@ class core extends \q_search {
             case "posts" :
             default :
 
+                // helper::log( \get_option( 'sticky_posts', [] ) );
+
                 // get sticky posts just for the registered post_type ##
                 $posts = \get_posts([
                     'post_type'         => $posted['post_type'],
                     'posts_per_page'    => -1, // all of them ##
                     "post_status"       => "publish",
-                    "post__in"          => \get_site_option( 'sticky_posts', [] )
+                    "post__in"          => \get_option( 'sticky_posts', [] )
                 ]);
 
                 // get IDs ##
@@ -258,7 +260,7 @@ class core extends \q_search {
                 // helper::log( $post__in );
 
                 // now match ID's to the sticky posts ##
-                #$post__in = array_intersect( $posts_ids, \get_site_option( 'sticky_posts', [] ) );
+                #$post__in = array_intersect( $posts_ids, \get_option( 'sticky_posts', [] ) );
 
                 // helper::log( $post__in );
                 

@@ -1,4 +1,9 @@
-### 3.3.3
+### 3.3.4 ###
+
+* Changes sticky_post lookup from network option to site specific get_option()
+
+### 3.3.3 ###
+
 * search form css fixes
 
 ### 3.3.3 ###

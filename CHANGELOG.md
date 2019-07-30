@@ -1,3 +1,8 @@
+### 3.4.0 ###
+
+* Added Q dependency check
+* Added Q debugging routine
+
 ### 3.3.4 ###
 
 * Changes sticky_post lookup from network option to site specific get_option()

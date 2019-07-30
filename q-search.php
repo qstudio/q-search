@@ -13,7 +13,7 @@
  * Plugin Name:     Q Search
  * Plugin URI:      https://www.qstudio.us
  * Description:     Filter posts by taxonomies or text search using AJAX to load results
- * Version:         3.3.4
+ * Version:         3.4.0
  * Author:          Q Studio
  * Author URI:      https://www.qstudio.us
  * License:         GPL
@@ -37,8 +37,8 @@ if ( ! class_exists( 'q_search' ) ) {
         private static $instance = null;
 
         // Plugin Settings
-        const version = '3.3.4';
-        static $device = ''; // start false ##
+        const version = '3.4.0';
+        // static $device = ''; // start false ##
         static $debug = false;
         // static $load_count = 0;
         const text_domain = 'q-search'; // for translation ##
@@ -85,19 +85,38 @@ if ( ! class_exists( 'q_search' ) ) {
             // set text domain ##
             add_action( 'init', array( $this, 'load_plugin_textdomain' ), 1 );
             
-            // load properties ##
-            #self::load_properties();
+            // load libraries ##
+            self::load_libraries();
+
+            // check debug settings ##
+            add_action( 'plugins_loaded', array( get_class(), 'debug' ), 11 );
+
+        }
+
+
+        /**
+         * We want the debugging to be controlled in global and local steps
+         * If Q debug is true -- all debugging is true
+         * else follow settings in Q, or this plugin $debug variable
+         */
+        public static function debug()
+        {
 
             // define debug ##
             self::$debug = 
-                ( true === self::$debug ) ? 
-                true : 
-                class_exists( 'Q' ) ? 
-                    \Q::$debug : // use Q debug setting, as plugin property not active ##
-                    false ;
+                ( 
+                    class_exists( 'Q' )
+                    && true === \Q::$debug
+                ) ?
+                true :
+                self::$debug ;
 
-            // load libraries ##
-            self::load_libraries();
+            // test ##
+            // helper::log( 'Q exists: '.json_encode( class_exists( 'Q' ) ) );
+            // helper::log( 'Q debug: '.json_encode( \Q::$debug ) );
+            // helper::log( json_encode( self::$debug ) );
+
+            return self::$debug;
 
         }
 
@@ -179,12 +198,46 @@ if ( ! class_exists( 'q_search' ) ) {
 
 
         /**
+         * Check for required classes to build UI features
+         * 
+         * @return      Boolean 
+         * @since       0.1.0
+         */
+        public static function has_dependencies()
+        {
+
+            // check for what's needed ##
+            if (
+                ! class_exists( 'Q' )
+            ) {
+
+                helper::log( 'Q classes are required, install required plugin.' );
+
+                return false;
+
+            }
+
+            // ok ##
+            return true;
+
+        }
+        
+        
+
+        /**
         * Load Libraries
         *
         * @since        2.0
         */
 		private static function load_libraries()
         {
+
+            // check for dependencies, required for UI components - admin will still run ##
+            if ( ! self::has_dependencies() ) {
+
+                return false;
+
+            }
 
             // methods ##
             require_once self::get_plugin_path( 'library/core/helper.php' );

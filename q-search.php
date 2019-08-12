@@ -24,6 +24,8 @@
  * GitHub Plugin URI: qstudio/q-search
 */
 
+use q\search\core\helper as helper;
+
 defined( 'ABSPATH' ) OR exit;
 
 if ( ! class_exists( 'q_search' ) ) {

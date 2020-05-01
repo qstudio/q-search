@@ -870,7 +870,8 @@ class theme extends \q_search {
     </div>
 <?php
 
-    	exit; // stop running now ##
+		return;
+    	// exit; // stop running now ##... @TODO, this is a killer.. ##
 
   	}
 

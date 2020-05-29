@@ -33,16 +33,15 @@ class core extends \q_search {
 
         // helper::log( 'Device: '.helper::get_device() );
 
-        // values ##
+		// values ##
+		$config["load"]             = \apply_filters( 'q/search/load', [ 'load' => true ] ); //loading state ##
         $config["widget_title"]     = __( "Search", 'q-search' );
-        $config["results"]          = \apply_filters( 'q/search/results', ['Post found', 'Posts found'] ); // results text ##
-        $config["no_results"]       = \apply_filters( 'q/search/no_results', 'No Posts found' ); // results text ##
+        $config["results"]          = \apply_filters( 'q/search/results', ['Result found', 'Results found'] ); // results text ##
+        $config["no_results"]       = \apply_filters( 'q/search/no_results', 'No Results found' ); // results text ##
         $config["table"]            = \apply_filters( 'q/search/table', 'posts' ); // users or posts ##
         $config["args"]             = \apply_filters( 'q/search/args', false ); // additional args passed to render method ##
         $config["application"]      = \apply_filters( 'q/search/application', 'general' ); // for filtering via ajax ##
         $config["device"]           = \apply_filters( 'q/search/device', helper::get_device() ); // for device check via ajax ##
-        // $config["load"]             = \apply_filters( 'q/search/load', false ); // default to non-loading state ##
-        // $config["load_method"]      = \apply_filters( 'q/search/load_method', 'sticky' ); // loading state method ##
         $config["post_type"]        = \apply_filters( 'q/search/post_type', 'post' );
         $config["taxonomies"]       = \apply_filters( 'q/search/taxonomies', 'category,post_tag' );
         $config["category_name"]    = \apply_filters( 'q/search/category_name', \get_query_var( 'category_name', '' ) );
@@ -58,7 +57,7 @@ class core extends \q_search {
         $config['role__not_in']     = \apply_filters( 'q/search/role__not_in', [ 'Administrator' ] );
         $config["meta_key"]         = \apply_filters( 'q/search/meta_key', false ); // for wp_user_query ordering ##
         $config["filter_type"]      = \apply_filters( 'q/search/filter_type', 'select' );
-        $config["filter_position"]  = \apply_filters( 'q/search/filter_position', 'top' );
+        // $config["filter_position"]  = \apply_filters( 'q/search/filter_position', 'top' );
         $config["show_count"]       = \apply_filters( 'q/search/show_count', 0 );
         $config["show_input_text"]  = \apply_filters( 'q/search/show_input_text', false );
         $config["hide_titles"]      = \apply_filters( 'q/search/hide_titles', 0 );
@@ -640,6 +639,9 @@ class core extends \q_search {
      */
     public static function query( $args = null ) 
     {
+
+		helper::log( $args );
+
         // define options ##
         $pagination = core::properties( "pagination" );
 
@@ -662,6 +664,8 @@ class core extends \q_search {
         // build args list ##
         $args = self::default_args( $posted );
 
+        // helper::log( $args );
+
         // check if we should progress ##
         if ( 
             empty( $filters ) 
@@ -669,9 +673,9 @@ class core extends \q_search {
         ) {
 
             // seems not ##
-            #theme::no_results(  __( 'Please select a filter.', 'q-search' ) ); // show the sad face :(
+            // theme::no_results(  __( 'Please select a filter.', 'q-search' ) ); // show the sad face :(
 
-            // helper::log( 'Running load query..' );
+            helper::log( 'Running load query..' );
 
             // get args ##
             $args = self::empty_args( $posted );
@@ -689,7 +693,7 @@ class core extends \q_search {
             // get args ##
             $args = self::empty_args( $posted );
 
-            // helper::log( 'Running empty query..' );
+            helper::log( 'Running empty query..' );
 
             // nope ##
             $pagination = \apply_filters( 'q/search/pagination/empty/', false );;
@@ -923,6 +927,11 @@ class core extends \q_search {
                     'slug' => 'one-year',
                     'term_id' => '365',
                     'name' => __( 'One Year', 'q-search' )
+                ),
+                '5' => array (
+                    'slug' => 'five-year',
+                    'term_id' => '1825',
+                    'name' => __( 'Five Years', 'q-search' )
                 )
             );
 
@@ -1028,6 +1037,18 @@ class core extends \q_search {
     */
     public static function get_pagination( $total_posts, $posts_per_page, $page_number )
     {
+
+		// helper::log( $total_posts );
+
+		// // no data - no pagination ##
+		// if ( 
+		// 	! $total_posts 
+		// 	|| 0 == $total_posts
+		// ) {
+
+		// 	return false;
+
+		// }
 
         $pages = ceil( $total_posts / $posts_per_page ); // calc pages
 

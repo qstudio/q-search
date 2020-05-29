@@ -76,31 +76,24 @@ class theme extends \q_search {
 
     // helper::log( 'rendering...' );
 
-?>
-    <div>
-<?php
-
-    // let's check if there are any posts to search ##
+    // let's check if there are any posts to search, defined on very high, loose terms... ##
     if ( core::has_posts() ) {
 
 		// add inline JS to instatiate AJAX call ##
 		self::scripts();
 
 ?>
-		<div class="q-search-li">
-			<div id="q-search-content" class="horizontal">
+		<div id="q-search-content" class="row">
 <?php
 
 			// build filter navigation ##
 			self::filters();
 
-			// add AJAX section ##
+			// add AJAX section -- this might be empty on load state ##
 			self::results();
 
 ?>
-			</div>
 		</div>
-	</div>
 <?php
 
     } else {
@@ -145,7 +138,7 @@ class theme extends \q_search {
     }
 
 ?>
-    <p class="no-results"><?php echo $message; ?></p>
+    <pdiv class="row no-results"><?php echo $message; ?></div>
 <?php
 
 	}
@@ -161,20 +154,8 @@ class theme extends \q_search {
   public static function result()
   {
 
-    #global $post;
-
-    /*
-    <div class="ajax-loaded q-search-default">
-        <h3>%title%</h3>
-        <a href="%permalink%" title="%title%">
-            <img src="%src%" />
-        </a>
-        <p>%content%</p>
-        <a href="%permalink%" title="%title%">Read More</a>
-    </div>
-    */
 ?>
-    <div class="ajax-loaded  q-search-default">
+    <div class="ajax-loaded q-search-default">
       	<h3><?php \the_title();?></h3>
 		<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
 			<?php \the_post_thumbnail(array( 150, 150 )); ?>
@@ -198,12 +179,12 @@ class theme extends \q_search {
   {
 
 ?>
-    <div id="ajax-content">
-      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'posts' ); ?>">
+    <div id="ajax-content" class="col-12">
+      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row' ); ?>">
 <?php
 
-			// run load query ##
-			core::query([ 'load' => true ]);
+		// run load query ##
+		core::query( core::properties( 'load' ) );
 
 ?>
       	</div>
@@ -235,138 +216,140 @@ class theme extends \q_search {
 		$class = core::properties( 'class' );
 		$filter_type = core::properties( 'filter_type' );
 		$hide_titles = core::properties( 'hide_titles' );
-		$filter_position = core::properties( 'filter_position' );
+		// $filter_position = core::properties( 'filter_position' );
 		$show_count = core::properties( 'show_count' );
 		$show_input_text = core::properties( 'show_input_text' );
 
 		// position the filters correctly ##
-		$position = $filter_position == 'vertical' ? 'vertical' : 'horizontal' ;
+		// $position = $filter_position == 'vertical' ? 'vertical' : 'horizontal' ;
 
 ?>
-		<form id="q-search-form" class="ajax-filters row <?php echo $position; ?>">
+		<form id="q-search-form" class="ajax-filters col-12">
+			<div class="row">
 <?php
 
-		// text input ##
-		echo self::filter_input();
+				// text input ##
+				echo self::filter_input();
 
-		// check for user_meta filters ##
-		echo self::user_meta();
+				// check for user_meta filters ##
+				echo self::user_meta();
 
-		// select grid ##
-		$grid = core::properties( 'grid_select' );
+				// select grid ##
+				$grid = core::properties( 'grid_select' );
 
-		// helper::log( $grid );
+				// helper::log( $grid );
 
-		$queried_object = \get_queried_object();
-		// helper::log($taxonomies);
+				$queried_object = \get_queried_object();
+				// helper::log($taxonomies);
 
-		if ( 
-			$taxonomies 
-			&& isset( $taxonomies[0] ) 
-			&& $taxonomies[0] > '' 
-		) {
+				if ( 
+					$taxonomies 
+					&& isset( $taxonomies[0] ) 
+					&& $taxonomies[0] > '' 
+				) {
 
-			foreach( $taxonomies as $taxonomy ) {
+					foreach( $taxonomies as $taxonomy ) {
 
-			// clean up ##
-			$taxonomy = trim( $taxonomy );
+						// clean up ##
+						$taxonomy = trim( $taxonomy );
 
-			// get tax ##
-			if ( false === $get_taxonomy = core::get_taxonomy( $taxonomy ) ) {
+						// get tax ##
+						if ( false === $get_taxonomy = core::get_taxonomy( $taxonomy ) ) {
 
-				// helper::log( 'skipping: '.$taxonomy );
+							// helper::log( 'skipping: '.$taxonomy );
 
-				continue;
+							continue;
 
-			}
+						}
 
-			if ( 
-				$filter_type == 'list'
-				&& $hide_titles == 0 
-			){
+						if ( 
+							$filter_type == 'list'
+							&& $hide_titles == 0 
+						){
 
-				echo \apply_filters( 'q/search/filter/title', "<h4>{$the_tax_name}</h4>" );
+							echo \apply_filters( 'q/search/filter/title', "<h4>{$the_tax_name}</h4>" );
 
-	        }
+						}
 
-    	    #pr($term);
+						#pr($term);
 
-			// select or list items ? ##
-			if( $taxonomy != 'mos_interest' ) {
+						// select or list items ? ##
+						if( $taxonomy != 'mos_interest' ) {
 
-				echo "<div class='".$grid."'>"; 
-				echo "<div class='selector'>";
-				// echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
-				echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
-				
-				// check for preselect option ##
-				echo "<option selected value=\"\" class=\"default\">".$get_taxonomy["name"]."</option>";
+							echo "<div class='".$grid."'>"; 
+							echo "<div class='selector'>";
+							// echo $taxonomy !== 'category' ? "<label>".$get_taxonomy["label"]."</label>" : '';
+							echo "<select name='".$taxonomy."' class=\"form-control q-search-select filter-$taxonomy\">";
+							
+							// check for preselect option ##
+							echo "<option selected value=\"\" class=\"default\">".$get_taxonomy["name"]."</option>";
 
-				#wp_die(pr($get_taxonomy["terms"]));
-				
-				foreach( $get_taxonomy["terms"] as $term ) {
+							#wp_die(pr($get_taxonomy["terms"]));
+							
+							foreach( $get_taxonomy["terms"] as $term ) {
 
-					echo "<option value=\"{$term->term_id}\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\" >";
+								echo "<option value=\"{$term->term_id}\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\" >";
 
-					echo "{$term->name}";
+								echo "{$term->name}";
 
-					if( $show_count == 1 ) {
+								if( $show_count == 1 ) {
+									
+									echo " ({$term->count})";
 						
-						echo " ({$term->count})";
-			
-					}
+								}
 
-            		echo "</option>";
+								echo "</option>";
 
-				}
+							}
 
-				echo "</select>";
-				echo "</div></div>";
+							echo "</select>";
+							echo "</div></div>";
 
-			} else {
+						} else {
 
-				echo "<div><div class='tags form-group'>";
-				echo '<div><label>Choose Interests</label></div>';
+							echo "<div><div class='tags form-group'>";
+							echo '<div><label>Choose Interests</label></div>';
 
-				foreach( $get_taxonomy["terms"] as $term ) {
+							foreach( $get_taxonomy["terms"] as $term ) {
 
-					echo '<div class="tag">';
-            		echo '<input name="'.$taxonomy.'[]" id="interest-'.$term->slug.'" value="'.$term->term_id.'" type="checkbox" ';
-          
-					if ( $term->term_id == $queried_object->term_id ) {
+								echo '<div class="tag">';
+								echo '<input name="'.$taxonomy.'[]" id="interest-'.$term->slug.'" value="'.$term->term_id.'" type="checkbox" ';
+					
+								if ( $term->term_id == $queried_object->term_id ) {
 
-						echo " checked";
+									echo " checked";
 
-            		}
-          
-					echo '/><label for="interest-'.$term->slug.'">'.$term->name.'</label>';
+								}
+					
+								echo '/><label for="interest-'.$term->slug.'">'.$term->name.'</label>';
 
-            		// echo "\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\"><a href=\"#\" class=\"ajax-filter-label\"><span class=\"checkbox\"></span>{$term->name}</a></label>";
-            //                if( $show_count == 1 ) {
-            //                  echo " ({$term->count})";
-            //                }
+								// echo "\" data-tax=\"$taxonomy={$term->term_id}\" data-slug=\"{$term->slug}\"><a href=\"#\" class=\"ajax-filter-label\"><span class=\"checkbox\"></span>{$term->name}</a></label>";
+						//                if( $show_count == 1 ) {
+						//                  echo " ({$term->count})";
+						//                }
 
-            		echo "</div>";
+								echo "</div>";
 
-		  		}
+							}
 
-				echo '</div></div>';
+							echo '</div></div>';
 
-			}
+						}
 
-		} // loop ##
+					} // loop ##
 
-	} // taxs set ##
+				} // taxs set ##
 
 ?>
-	<div id="q-search" class="col-12">
-        <div class="buttons">
-          	<div class="input">
-            	<input type="reset" id="reset" class="qs-reset qs-button qs-reset" value="Clear choices">
-          	</div>
-        </div>
-	</div>
-</form>
+			</div>
+			<div id="q-search" class="row">
+				<div class="buttons col-12">
+					<div class="input">
+						<input type="reset" id="reset" class="qs-reset qs-button qs-reset" value="Clear choices">
+					</div>
+				</div>
+			</div>
+		</form>
 <?php
 
   	}
@@ -531,6 +514,16 @@ class theme extends \q_search {
 
 		// helper::log( 'rebuilding pagination on device:'. $posted["device"] );
 
+		// if ( 
+		// 	! core::get_pagination( $total_posts, $posts_per_page, $page_number )
+		// ){
+
+		// 	helper::log( 'No posts to paginate..' );
+
+		// 	return false;
+
+		// }
+
 		// handheld ##
 		switch ( $posted["device"] ) {
 
@@ -567,7 +560,7 @@ class theme extends \q_search {
     // helper::log( 'Loading Handheld Pagination..' );
 
 ?>
-    <nav class="q-search-pagination">
+    <nav class="q-search-pagination col-12">
       	<div class="pagination-inner">
 <?php
 
@@ -638,7 +631,7 @@ class theme extends \q_search {
     // helper::log( 'Loading Desktop Pagination..' );
 
 ?>
-    <nav class="q-search-pagination">
+    <nav class="q-search-pagination col-12">
       	<div class="pagination-inner">
 <?php
 
@@ -792,7 +785,10 @@ class theme extends \q_search {
     }
 
     // create nonce ##
-    $nonce = \esc_js( \wp_create_nonce( 'q-search-nonce' ) );
+	$nonce = \esc_js( \wp_create_nonce( 'q-search-nonce' ) );
+	
+	// REMOVED ##
+	// filter_position:    core::properties( 'filter_position'); ##
 
 ?>
     <script type="text/javascript">
@@ -810,7 +806,6 @@ class theme extends \q_search {
             order:              '<?php echo core::properties( 'order' ); ?>',
             order_by:           '<?php echo core::properties( 'order_by' ); ?>',
             filter_type:        '<?php echo core::properties( 'filter_type' ); ?>',
-			filter_position:    '<?php echo core::properties( 'filter_position') ; ?>',
 			category_name:      '<?php echo core::properties( 'category_name') ; ?>',
         	author_name:       	'<?php echo core::properties( 'author_name') ; ?>',
         	tag:    			'<?php echo core::properties( 'tag') ; ?>',
@@ -839,7 +834,7 @@ class theme extends \q_search {
 		// helper::log( core::properties( 'results', 'array' ) );
 
 		printf (
-			'<h5 class="mb-5 push-40 q-search-count-results" data-count="%d">%d %s</h5>'
+			'<h5 class="mb-5 col-12 q-search-count-results" data-count="%d">%d %s</h5>'
 			,   intval( $count )
 			,   intval( $count )
 			,   intval( $count ) > 1 ? core::properties( 'results', 'array' )[1] : core::properties( 'results', 'array' )[0]
@@ -862,7 +857,7 @@ class theme extends \q_search {
 		$message = ! is_null( $string ) ? $string : core::properties( 'no_results' ) ;
 
 ?>
-    <div class="no-results text-center">
+    <div class="no-results text-center mt-3 mb-3">
 		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message; ?></h5>
 		<div>Sorry, that filter combination returned no results.</div>

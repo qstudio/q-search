@@ -83,7 +83,7 @@ class theme extends \q_search {
 		self::scripts();
 
 ?>
-		<div id="q-search-content" class="row">
+		<div id="q-search-content" class="row row mt-3">
 <?php
 
 			// build filter navigation ##
@@ -175,16 +175,23 @@ class theme extends \q_search {
    * @since    2.0.0
    * @return   String
    */
-  public static function results( $load = false )
+  public static function results()
   {
 
 ?>
     <div id="ajax-content" class="col-12">
-      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row' ); ?>">
+      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row mb-5' ); ?>">
 <?php
 
+		// helper::log( core::properties( 'control', 'array' ) );
+
 		// run load query ##
-		core::query( core::properties( 'load' ) );
+		core::query( core::properties( 'control', 'array' ) );
+		// if ( false === core::query( core::properties( 'control', 'array' ) ) ) {
+
+			// theme::load_empty( core::properties( 'load_empty', 'array' ) );
+
+		// }
 
 ?>
       	</div>
@@ -342,10 +349,10 @@ class theme extends \q_search {
 
 ?>
 			</div>
-			<div id="q-search" class="row">
-				<div class="buttons col-12">
+			<div id="q-search" class="<?php echo \apply_filters( 'q/search/button/class', 'row' ); ?>">
+				<div class="buttons col-12 text-center mb-3 mt-2">
 					<div class="input">
-						<input type="reset" id="reset" class="qs-reset qs-button qs-reset" value="Clear choices">
+						<input type="reset" id="reset" class="qs-button qs-reset" value="Reset Options">
 					</div>
 				</div>
 			</div>
@@ -560,7 +567,7 @@ class theme extends \q_search {
     // helper::log( 'Loading Handheld Pagination..' );
 
 ?>
-    <nav class="q-search-pagination col-12">
+    <nav class="q-search-pagination col-12 mt-3 mb-5">
       	<div class="pagination-inner">
 <?php
 
@@ -631,7 +638,7 @@ class theme extends \q_search {
     // helper::log( 'Loading Desktop Pagination..' );
 
 ?>
-    <nav class="q-search-pagination col-12">
+    <nav class="q-search-pagination col-12 mt-3">
       	<div class="pagination-inner">
 <?php
 
@@ -834,7 +841,7 @@ class theme extends \q_search {
 		// helper::log( core::properties( 'results', 'array' ) );
 
 		printf (
-			'<h5 class="mb-5 col-12 q-search-count-results" data-count="%d">%d %s</h5>'
+			'<h5 class="mb-5 col-12 q-search-count-results text-center" data-count="%d">%d %s</h5>'
 			,   intval( $count )
 			,   intval( $count )
 			,   intval( $count ) > 1 ? core::properties( 'results', 'array' )[1] : core::properties( 'results', 'array' )[0]
@@ -857,11 +864,37 @@ class theme extends \q_search {
 		$message = ! is_null( $string ) ? $string : core::properties( 'no_results' ) ;
 
 ?>
-    <div class="no-results text-center mt-3 mb-3">
+    <div class="no-results text-center col-12 mt-3 mb-3">
 		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message; ?></h5>
 		<div>Sorry, that filter combination returned no results.</div>
-		<div>Please try different criteria.</div>
+		<div>Please try different criteria or <a href="#" class="qs-reset">Clear all Filters</a>.</div>
+    </div>
+<?php
+
+		return;
+    	// exit; // stop running now ##... @TODO, this is a killer.. ##
+
+	  }
+	  
+
+	 /**
+	 * Buid Empty Loads
+	 *
+	 * @since       1.4.0
+	 * @return      String      HTML for sad face :(
+	 */
+	public static function load_empty( $array = null )
+	{
+
+		// allow message to be passed ##
+		$message = ! is_null( $array ) ? $array : core::properties( 'load_message', 'array' ) ;
+
+?>
+    <div class="no-results text-center col-12 mt-3 mb-3">
+		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
+		<h5 class='push-20'><?php echo $message['title']; ?></h5>
+		<div><?php echo $message['body']; ?></div>
     </div>
 <?php
 

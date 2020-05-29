@@ -34,10 +34,14 @@ class core extends \q_search {
         // helper::log( 'Device: '.helper::get_device() );
 
 		// values ##
-		$config["load"]             = \apply_filters( 'q/search/load', [ 'load' => true ] ); //loading state ##
+		$config["control"]          = \apply_filters( 'q/search/control', [ 'load' => '1', 'empty' => '1' ] ); //loading state ##
         $config["widget_title"]     = __( "Search", 'q-search' );
         $config["results"]          = \apply_filters( 'q/search/results', ['Result found', 'Results found'] ); // results text ##
-        $config["no_results"]       = \apply_filters( 'q/search/no_results', 'No Results found' ); // results text ##
+		$config["no_results"]       = \apply_filters( 'q/search/no_results', 'No Results found' ); // results text ##
+		$config["load_empty"]       = \apply_filters( 'q/search/load_empty', [ // empty load text ##
+											'title' => 'Search Tool',
+											'body' 	=> 'Use the search option and filters to find results.' 
+									]);
         $config["table"]            = \apply_filters( 'q/search/table', 'posts' ); // users or posts ##
         $config["args"]             = \apply_filters( 'q/search/args', false ); // additional args passed to render method ##
         $config["application"]      = \apply_filters( 'q/search/application', 'general' ); // for filtering via ajax ##
@@ -104,11 +108,13 @@ class core extends \q_search {
 
         }
 
-        // helper::log( self::$properties );
-
         // kick back specified key or whole array ##
         return 
-            ( ! is_null( $key ) && isset( self::$properties[$key] ) && array_key_exists( $key, self::$properties ) ) ? 
+            ( 
+				! is_null( $key ) 
+				&& isset( self::$properties[$key] ) 
+				// && array_key_exists( $key, self::$properties ) 
+			) ? 
 
             // single array item ##
             ( is_array ( self::$properties[$key] ) && 'string' == $return ) ? 
@@ -265,9 +271,9 @@ class core extends \q_search {
                 
                 // build args list ##
                 $args = array(
-                    'post__in'              => $post__in, #\get_option( 'sticky_posts' ), // self::array_truncate( \get_option( 'sticky_posts' ), 12 ) ##
-                    'posts_per_page'        => $posted['posts_per_page'] > 20 ? 20 : intval( $posted['posts_per_page'] ), #core::properties( 'posts_per_page' ),
-                    'post_type'             => $posted['post_type'], #core::properties( 'post_type' ),
+                    'post__in'              => $post__in, // self::array_truncate( \get_option( 'sticky_posts' ), 12 ) ##
+                    'posts_per_page'        => $posted['posts_per_page'] > 20 ? 20 : intval( $posted['posts_per_page'] ), #
+                    'post_type'             => $posted['post_type'], 
                     'ignore_sticky_posts'   => true, // hmmm ##
                     "post_status"           => "publish"
                 );
@@ -631,16 +637,55 @@ class core extends \q_search {
 
 
 
+	public static function get_control( $args = null, $field = null ){
+
+		// helper::log( $args[$field] );
+
+		// sanity ##
+		if ( 
+			! isset( $args ) 
+			|| ! is_array( $args ) 
+			|| ! isset( $field ) 
+			|| ! isset( $args[$field] )
+		) {
+
+			// helper::log( 'Error in passed $args' );
+
+			return '1';
+
+		}
+
+		// kick back arg ##
+		return $args[$field];
+
+	}
+
+
+
     /**
      * AJAX callback method to query and render results
      * 
      * @since       1.7.0
      * @return      string      HTML for results
      */
-    public static function query( $args = null ) 
+    public static function query( $load = null ) 
     {
+		
+		// helper::log( core::properties( 'control', 'array' ) );
+		// $control = is_null( $control ) ? core::properties( 'control', 'array' ) : $control ;
 
-		helper::log( $args );
+		// if ( 
+		// 	'0' === $control = self::get_control( $load, 'load' )
+		// ) {
+
+		// 	// helper::log( $control );
+		// 	// helper::log( 'Load Blank' );
+
+		// 	return theme::load_empty( core::properties( 'load_empty', 'array' ) );
+
+        //     // die();
+
+		// }
 
         // define options ##
         $pagination = core::properties( "pagination" );
@@ -655,7 +700,8 @@ class core extends \q_search {
         }
 
         // grab post data ##
-        $posted = self::get_posted();
+		$posted = self::get_posted();
+		// helper::log( $posted );
 
         // get posted filters ##
         $filters = self::get_filters( $posted );
@@ -663,7 +709,6 @@ class core extends \q_search {
 
         // build args list ##
         $args = self::default_args( $posted );
-
         // helper::log( $args );
 
         // check if we should progress ##
@@ -675,8 +720,21 @@ class core extends \q_search {
             // seems not ##
             // theme::no_results(  __( 'Please select a filter.', 'q-search' ) ); // show the sad face :(
 
-            helper::log( 'Running load query..' );
+			// helper::log( '$Filters were empty..' );
 
+			if ( 
+				'0' === $control = self::get_control( $load, 'load' )
+			) {
+	
+				// helper::log( $control );
+				// helper::log( 'Load Blank' );
+	
+				return theme::load_empty( core::properties( 'load_empty', 'array' ) );
+	
+				// die();
+	
+			}
+			
             // get args ##
             $args = self::empty_args( $posted );
             
@@ -693,7 +751,20 @@ class core extends \q_search {
             // get args ##
             $args = self::empty_args( $posted );
 
-            helper::log( 'Running empty query..' );
+			helper::log( 'No $_POST object available' );
+			
+			if ( 
+				'0' === $control = self::get_control( core::properties( 'control', 'array' ), 'empty' )
+			) {
+	
+				// helper::log( $control );
+				// helper::log( 'Empty Blank' );
+	
+				return theme::load_empty( core::properties( 'load_empty', 'array' ) );
+
+            	die();
+	
+			}
 
             // nope ##
             $pagination = \apply_filters( 'q/search/pagination/empty/', false );;
@@ -704,6 +775,14 @@ class core extends \q_search {
             // helper::log( $args );
 
         } else {
+
+			// helper::log( '$_POST object IS available' );
+
+			if( ! isset( $args['tax_query'] ) ) {
+
+				$args['tax_query'] = [];
+	
+			}
 
             // check if the queried_object is good ##
             if( $_POST['queried_object'] != 'qs_null' ) {

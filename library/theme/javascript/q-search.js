@@ -185,7 +185,7 @@
                     //console.log("ID: "+self.section.attr("id"));
 
                     $(".ajax-loaded").fadeIn();
-                    $('html, body').animate({scrollTop: get_from_top() }, 300);
+                    $('html, body').animate({scrollTop: q_get_from_top() }, 300);
                     $('#ajax-filtered-section').animate({
                         'opacity': 1
                     }, 'slow');
@@ -370,30 +370,49 @@
 
             });
 
-
+			// cancel submit default behaviour ##
             $("#q-search-form").on('submit', function(e) {
                 e.preventDefault();
+			});
+			
+			// reset from class callback ##
+			$("#q-search").on('click', '.qs-reset', function(e) {
+				// console.log( 'RESET...' );
+				$("#q-search-form").trigger("reset");
             });
 
+
             $("#q-search-form").on("change submit reset", function(e) {
-                if ( self.running == false ) {
+				
+				if ( self.running == false ) {
+
                     if (e.type == 'reset') {
+
                         formData = '';
-                        $("#q-search-form input[type='reset']").hide();
+	
+						$("#q-search-form input[type='reset']").hide();
+
+						// empty searcher ##
+						$('#searcher').removeAttr('value');
+						
                     } else {
+
                         var formData = $('#q-search-form').serialize();
-                        $("#q-search-form input[type='reset']").show();
+						$("#q-search-form input[type='reset']").show();
+						
                     }
+
+					// console.log( 'Are we here>..?' );
 
                     //self.first = false; // load normally from now ##
 
                     // Set to true to stop function chaining.
-                    self.running = true;
-
+					self.running = true;
+					
                     // The following line resets the queried_object var so that in an ajax request it page's queried object is ignored.
                     QS_CONFIG['queried_object'] = 'qs_null';
 
-                    // remove all selected_filters from options in this <select> ##
+					// remove all selected_filters from options in this <select> ##
                     $(this).find('option').removeClass(self.selected_filters);
 
                     // Cache some of the DOM elements for re-use later in the method.
@@ -414,7 +433,8 @@
                     }
 
                     // console.log(a);
-                    self.filter(formData);
+					self.filter(formData);
+					
                 }
 
                 // e.preventDefault();
@@ -485,7 +505,8 @@
             $(".no-results").hide();
             $('.count-results').hide();
 
-            $('html, body').animate({scrollTop: 0}, "fast");
+			// $('html, body').animate({scrollTop: 0}, "fast");
+			$('html, body').animate({scrollTop: q_get_from_top() }, 300);
 
         },
 
@@ -501,7 +522,10 @@
             this.inputs = this.opts['inputs'];
             this.selects = this.opts['selects'];
             this.progbar = $(this.opts['progbar']);
-            this.selected_filters = this.opts['selected_filters'];
+			this.selected_filters = this.opts['selected_filters'];
+			
+			// hide reset ##
+			$("#q-search-form input[type='reset']").hide();
 
             // $title_default = document.getElementsByTagName("title")[0].innerHTML;
 
@@ -528,12 +552,12 @@
     });
 
     // pagination clicks scroll the viewer back to the top of the page ##
-    $("body").on( 'click', 'nav.pagination a', function(e) {
+    $("body").on( 'click', 'nav.pagination a, .q-scroll-top', function(e) {
 
         // stop default action ##
         e.preventDefault();
 
-        $("html, body").animate({ scrollTop: 0 }, "fast").delay(500);
+        $('html, body').animate({scrollTop: q_get_from_top() }, 300 );
 
     });
 
@@ -564,11 +588,13 @@
         // console.log( 'Reset select..' );
     });
 
-    function get_from_top() {
+    function q_get_from_top() {
 
         var adminbarheight = ( typeof adminBarHeight === 'function' ) ? adminBarHeight() : 0 ;
         var fromTop = $("#q-search-form").length ? $("#q-search-form").offset().top - adminbarheight : 0 ;
         // console.log( 'From Top: '+fromTop );
+
+		return 0;
 
         return fromTop;
 
@@ -583,7 +609,6 @@
     function q_search_reenable(){
         $("#q-search-form select").prop('disabled', false);
         $("#q-search-form :input, #q-search-form button, #q-search-form .ajax-button").attr("disabled", false);
-
     }
 
 })(jQuery);

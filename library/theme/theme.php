@@ -180,7 +180,7 @@ class theme extends \q_search {
 
 ?>
     <div id="ajax-content" class="col-12">
-      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row mb-5' ); ?>">
+      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row mb-1' ); ?>">
 <?php
 
 		// helper::log( core::properties( 'control', 'array' ) );
@@ -864,7 +864,7 @@ class theme extends \q_search {
 		$message = ! is_null( $string ) ? $string : core::properties( 'no_results' ) ;
 
 ?>
-    <div class="no-results text-center col-12 mt-3 mb-3">
+    <div class="no-results text-center col-12 mt-0 mb-0">
 		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message; ?></h5>
 		<div>Sorry, that filter combination returned no results.</div>
@@ -891,7 +891,7 @@ class theme extends \q_search {
 		$message = ! is_null( $array ) ? $array : core::properties( 'load_message', 'array' ) ;
 
 ?>
-    <div class="no-results text-center col-12 mt-3 mb-3">
+    <div class="no-results text-center col-12 mt-0 mb-0">
 		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message['title']; ?></h5>
 		<div><?php echo $message['body']; ?></div>

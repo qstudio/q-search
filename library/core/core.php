@@ -1152,35 +1152,42 @@ class core extends \q_search {
     {
 
         // test settings ##
-        // helper::log( self::properties("post_type") );
+		// helper::log( self::properties("post_type") );
+		
+		// Get any existing copy of our transient data
+		if ( false === ( $test = \get_site_transient( 'q_search_has_posts' ) ) ) {
 
-        switch ( self::properties( "post_type" ) ) {
+			switch ( self::properties( "post_type" ) ) {
 
-            case "users" :
+				case "users" :
 
-                // build search args ##
-                $args = array( 
-                    'role__not_in'  => 'Administrator',
-                    'number'        => 1
-                );
+					// build search args ##
+					$args = array( 
+						'role__not_in'  => 'Administrator',
+						'number'        => 1
+					);
 
-                $test = \get_users( $args );
+					$test = \get_users( $args );
 
-            break ;
+				break ;
 
-            default :
+				default :
 
-                // build search args ##
-                $args = array( 
-                    'post_type'         => self::properties( "post_type" ),
-                    'post_per_page'     => 1
-                );
+					// build search args ##
+					$args = array( 
+						'post_type'         => self::properties( "post_type" ),
+						'post_per_page'     => 1
+					);
 
-                $test = \get_posts( $args );
+					$test = \get_posts( $args );
 
-            break ;
+				break ;
 
-        }
+			}
+
+			\set_site_transient( 'q_search_has_posts', $test, 24 * HOUR_IN_SECONDS );
+
+		}
 
         // helper::log( $test );
 

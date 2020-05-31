@@ -128,10 +128,6 @@ if ( ! class_exists( 'q_search' ) ) {
 
             #add_option( 'q_club_configured' );
 
-            // flush rewrites ##
-            #global $wp_rewrite;
-            #$wp_rewrite->flush_rules();
-
         }
 
 

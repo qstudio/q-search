@@ -3,8 +3,8 @@
 // namespace ##
 namespace q\search\core;
 
-// piggyback Q helper ##
-use q\core\helper as q_helper;
+// piggyback Q ##
+use q\core;
 
 /**
  * declare class
@@ -27,7 +27,7 @@ class helper extends \q_search {
     {
 
         // use Q helper, but pass class name for plugin URL and PATH tests ##
-        return q_helper::get( $include, $return, $type, $path, get_parent_class() );
+        return core\helper::get( $include, $return, $type, $path, get_parent_class() );
 
     }
 
@@ -42,7 +42,7 @@ class helper extends \q_search {
     public static function log( $log )
     {
 
-        return q_helper::log( $log );
+        return core\helper::log( $log );
 
     }
 
@@ -54,10 +54,10 @@ class helper extends \q_search {
     * @since       0.1
     * @return      string      Device slug
     */
-    public static function get_device()
+    public static function device()
     {
 
-        return q_helper::get_device();
+        return core\helper::device();
 
     }
 

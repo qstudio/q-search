@@ -1,10 +1,10 @@
 <?php
 
-#namespace q\search\admin;
+namespace q\search\widget;
 
-use q\search\core\helper as helper;
-use q\search\core\core as core;
-use q\search\theme\theme as theme;
+use q\search\core\helper as h;
+use q\search;
+// use q\search\core;
 
 /**
  * Widget - Search
@@ -52,7 +52,7 @@ if ( ! class_exists( 'q_widget_search' ) )
             $title = $instance['title'] ? $instance['title'] : core::properties("widget_title");
             $this->settings["title"] = \apply_filters( 'widget_title', $title );
 
-            $post_type = $instance['post_type'] ? $instance['post_type'] : core::properties("post_type");
+            $post_type = $instance['post_type'] ? $instance['post_type'] : core\method::properties("post_type");
             $this->settings["post_type"] = \apply_filters( 'widget_post_type', $post_type );
 
             $taxonomies = $instance['taxonomies'] ? $instance['taxonomies'] : core::properties("taxonomies") ;

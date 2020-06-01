@@ -2,14 +2,13 @@
 
 namespace q\search\theme;
 
-use q\search\core\helper as helper;
-use q\search\core\core as core;
-#use q\search\user\user as user;
+use q\search\core\helper as h;
+use q\search; // whole namespace ##
 
 // load it up ##
-\q\search\theme\theme::run();
+\q\search\theme\ui::run();
 
-class theme extends \q_search {
+class ui extends \q_search {
 
 	public static function run()
   	{
@@ -28,15 +27,15 @@ class theme extends \q_search {
 	*/
 	public static function wp_enqueue_scripts() {
 
-		\wp_register_style( 'q-search-css', helper::get( "theme/css/q-search.css", 'return' ), '', self::version, 'all' );
+		\wp_register_style( 'q-search-css', h::get( "theme/css/q-search.css", 'return' ), '', self::version, 'all' );
 		\wp_enqueue_style( 'q-search-css' );
 
 		// history ##
-		#\wp_register_script('jquery-history-js', helper::get( "theme/javascript/jquery.history.js" , 'return' ) ,array('jquery'), self::version, true );
+		#\wp_register_script('jquery-history-js', h::get( "theme/javascript/jquery.history.js" , 'return' ) ,array('jquery'), self::version, true );
 		#\wp_enqueue_script('jquery-history-js');
 
 		// add JS ## -- after all dependencies ##
-		\wp_enqueue_script( 'q-search-js', helper::get( "theme/javascript/q-search.js", 'return' ), array( 'jquery' ), self::version, true );
+		\wp_enqueue_script( 'q-search-js', h::get( "theme/javascript/q-search.js", 'return' ), array( 'jquery' ), self::version, true );
 
 		// pass variable values defined in parent class ##
 		\wp_localize_script( 'q-search-js', 'q_search', array(
@@ -74,10 +73,10 @@ class theme extends \q_search {
 	public static function render()
 	{
 
-    // helper::log( 'rendering...' );
+    // h::log( 'rendering...' );
 
     // let's check if there are any posts to search, defined on very high, loose terms... ##
-    if ( core::has_posts() ) {
+    if ( search\core\method::has_posts() ) {
 
 		// add inline JS to instatiate AJAX call ##
 		self::scripts();
@@ -98,7 +97,7 @@ class theme extends \q_search {
 
     } else {
 
-      	// helper::log( 'has_posts returned zero' );
+      	// h::log( 'has_posts returned zero' );
 
 		// nothing to search :( ##
 		self::no_posts();
@@ -183,13 +182,13 @@ class theme extends \q_search {
       	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row mb-1' ); ?>">
 <?php
 
-		// helper::log( core::properties( 'control', 'array' ) );
+		// h::log( search\core\method::properties( 'control', 'array' ) );
 
 		// run load query ##
-		core::query( core::properties( 'control', 'array' ) );
-		// if ( false === core::query( core::properties( 'control', 'array' ) ) ) {
+		search\core\method::query( search\core\method::properties( 'control', 'array' ) );
+		// if ( false === search\core\method::query( search\core\method::properties( 'control', 'array' ) ) ) {
 
-			// theme::load_empty( core::properties( 'load_empty', 'array' ) );
+			// theme::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
 
 		// }
 
@@ -214,18 +213,18 @@ class theme extends \q_search {
 	{
 
 		// check for passed values or merge defaults ##
-		$post_type = array( core::properties( 'post_type' ) );
-		$taxonomies = explode( ",", core::properties( 'taxonomies' ) );
-		#helper::log( $taxonomies );
-		$table = core::properties( 'table' );
-		$application = core::properties( 'application' );
-		$device = core::properties( 'device' );
-		$class = core::properties( 'class' );
-		$filter_type = core::properties( 'filter_type' );
-		$hide_titles = core::properties( 'hide_titles' );
-		// $filter_position = core::properties( 'filter_position' );
-		$show_count = core::properties( 'show_count' );
-		$show_input_text = core::properties( 'show_input_text' );
+		$post_type = array( search\core\method::properties( 'post_type' ) );
+		$taxonomies = explode( ",", search\core\method::properties( 'taxonomies' ) );
+		#h::log( $taxonomies );
+		$table = search\core\method::properties( 'table' );
+		$application = search\core\method::properties( 'application' );
+		$device = search\core\method::properties( 'device' );
+		$class = search\core\method::properties( 'class' );
+		$filter_type = search\core\method::properties( 'filter_type' );
+		$hide_titles = search\core\method::properties( 'hide_titles' );
+		// $filter_position = search\core\method::properties( 'filter_position' );
+		$show_count = search\core\method::properties( 'show_count' );
+		$show_input_text = search\core\method::properties( 'show_input_text' );
 
 		// position the filters correctly ##
 		// $position = $filter_position == 'vertical' ? 'vertical' : 'horizontal' ;
@@ -242,12 +241,12 @@ class theme extends \q_search {
 				echo self::user_meta();
 
 				// select grid ##
-				$grid = core::properties( 'grid_select' );
+				$grid = search\core\method::properties( 'grid_select' );
 
-				// helper::log( $grid );
+				// h::log( $grid );
 
 				$queried_object = \get_queried_object();
-				// helper::log($taxonomies);
+				// h::log($taxonomies);
 
 				if ( 
 					$taxonomies 
@@ -261,9 +260,9 @@ class theme extends \q_search {
 						$taxonomy = trim( $taxonomy );
 
 						// get tax ##
-						if ( false === $get_taxonomy = core::get_taxonomy( $taxonomy ) ) {
+						if ( false === $get_taxonomy = search\core\method::get_taxonomy( $taxonomy ) ) {
 
-							// helper::log( 'skipping: '.$taxonomy );
+							// h::log( 'skipping: '.$taxonomy );
 
 							continue;
 
@@ -368,7 +367,7 @@ class theme extends \q_search {
 	{
 
 		// is this shown ? ##
-		$show_input_text = core::properties( 'show_input_text' );
+		$show_input_text = search\core\method::properties( 'show_input_text' );
 
 		if ( ! $show_input_text ) {
 
@@ -377,7 +376,7 @@ class theme extends \q_search {
 		}
 
 		// filter grid ##
-		$grid = core::properties( 'grid_input' );
+		$grid = search\core\method::properties( 'grid_input' );
 
 		$markup = 
 		'<div class="input text input-searcher '.$grid.'">
@@ -407,7 +406,7 @@ class theme extends \q_search {
 		}
 
 		// filter grid ##
-		$grid = core::properties( 'input' == $user_meta['input'] ? 'grid_input' : 'grid_select' );
+		$grid = search\core\method::properties( 'input' == $user_meta['input'] ? 'grid_input' : 'grid_select' );
 
 		// we need to get all the options values to loop over and show ##
 		$options = $user_meta['options'];
@@ -417,7 +416,7 @@ class theme extends \q_search {
 			|| ! is_array( $options )
 		) {
 
-			helper::log( 'No valid options passed to display' );
+			h::log( 'No valid options passed to display' );
 
 			return false;
 
@@ -449,7 +448,7 @@ class theme extends \q_search {
 	{
 	
 		// filter grid ##
-		$grid = core::properties( 'grid_select' );
+		$grid = search\core\method::properties( 'grid_select' );
 
 		$markup = 
 		"<div class='{$grid}'> 
@@ -487,7 +486,7 @@ class theme extends \q_search {
 			|| ! isset( $args['args']['field'] )
 		) {
 
-			helper::log( 'Malformed data passed to method' );
+			h::log( 'Malformed data passed to method' );
 
 			return false;
 
@@ -519,13 +518,13 @@ class theme extends \q_search {
 	public static function pagination( $total_posts, $posts_per_page, $posted )
 	{
 
-		// helper::log( 'rebuilding pagination on device:'. $posted["device"] );
+		// h::log( 'rebuilding pagination on device:'. $posted["device"] );
 
 		// if ( 
-		// 	! core::get_pagination( $total_posts, $posts_per_page, $page_number )
+		// 	! search\core\method::get_pagination( $total_posts, $posts_per_page, $page_number )
 		// ){
 
-		// 	helper::log( 'No posts to paginate..' );
+		// 	h::log( 'No posts to paginate..' );
 
 		// 	return false;
 
@@ -564,7 +563,7 @@ class theme extends \q_search {
 	public static function pagination_handheld( $total_posts, $posts_per_page )
 	{
 
-    // helper::log( 'Loading Handheld Pagination..' );
+    // h::log( 'Loading Handheld Pagination..' );
 
 ?>
     <nav class="q-search-pagination col-12 mt-3 mb-5">
@@ -593,7 +592,7 @@ class theme extends \q_search {
 
         // work out total number of pages ##
         $total_pages = floor( $total_posts / $posts_per_page );
-        // helper::log( 'Total Pages: '.$total_pages );
+        // h::log( 'Total Pages: '.$total_pages );
 
         // check if we need to print pagination ##
         if (
@@ -635,7 +634,7 @@ class theme extends \q_search {
 	public static function pagination_desktop( $total_posts, $posts_per_page )
 	{
 
-    // helper::log( 'Loading Desktop Pagination..' );
+    // h::log( 'Loading Desktop Pagination..' );
 
 ?>
     <nav class="q-search-pagination col-12 mt-3">
@@ -660,11 +659,11 @@ class theme extends \q_search {
         <span class="qs-pages page-numbers-wrapper">
 <?php
 
-	#helper::log( $posts_per_page );
+	#h::log( $posts_per_page );
 
 	// get paging info ##
-	$pagination = core::get_pagination( $total_posts, $posts_per_page, $page_number );
-	#helper::log( $pagination );
+	$pagination = search\core\method::get_pagination( $total_posts, $posts_per_page, $page_number );
+	#h::log( $pagination );
 
 	// limit number of items shown on screen ##
 	$max = 7;
@@ -691,7 +690,7 @@ class theme extends \q_search {
 
 	}
 
-	#helper::log( '$sp: '.$sp );
+	#h::log( '$sp: '.$sp );
 
 	// If the current page >= $max then show link to 1st page
 	if ( $pagination['page_number'] >= $max ) {
@@ -778,7 +777,7 @@ class theme extends \q_search {
     // grab the queried object ##
     $queried_object = \get_queried_object();
 
-	// helper::log( $queried_object );
+	// h::log( $queried_object );
 
     // get the page's current taxonomy to filter
     if( isset( $queried_object->term_id ) ) {
@@ -795,7 +794,7 @@ class theme extends \q_search {
 	$nonce = \esc_js( \wp_create_nonce( 'q-search-nonce' ) );
 	
 	// REMOVED ##
-	// filter_position:    core::properties( 'filter_position'); ##
+	// filter_position:    search\core\method::properties( 'filter_position'); ##
 
 ?>
     <script type="text/javascript">
@@ -803,19 +802,19 @@ class theme extends \q_search {
         // configure QS_Filters ##
         var QS_CONFIG = {
             ajaxurl:            '<?php echo \home_url( 'wp-admin/admin-ajax.php' ) ?>',
-            table:              '<?php echo core::properties( 'table') ; ?>',
-            callback:           '<?php echo core::properties( 'callback') ; ?>',
-            application:        '<?php echo core::properties( 'application') ; ?>',
-            device:             '<?php echo core::properties( 'device') ; ?>',
-            post_type:          '<?php echo core::properties( 'post_type' ); ?>',
-            posts_per_page:     '<?php echo (int)core::properties( 'posts_per_page' ); ?>',
-            taxonomies:         '<?php echo str_replace( " ", "", core::properties( 'taxonomies' ) ); ?>',
-            order:              '<?php echo core::properties( 'order' ); ?>',
-            order_by:           '<?php echo core::properties( 'order_by' ); ?>',
-            filter_type:        '<?php echo core::properties( 'filter_type' ); ?>',
-			category_name:      '<?php echo core::properties( 'category_name') ; ?>',
-        	author_name:       	'<?php echo core::properties( 'author_name') ; ?>',
-        	tag:    			'<?php echo core::properties( 'tag') ; ?>',
+            table:              '<?php echo search\core\method::properties( 'table') ; ?>',
+            callback:           '<?php echo search\core\method::properties( 'callback') ; ?>',
+            application:        '<?php echo search\core\method::properties( 'application') ; ?>',
+            device:             '<?php echo search\core\method::properties( 'device') ; ?>',
+            post_type:          '<?php echo search\core\method::properties( 'post_type' ); ?>',
+            posts_per_page:     '<?php echo (int)search\core\method::properties( 'posts_per_page' ); ?>',
+            taxonomies:         '<?php echo str_replace( " ", "", search\core\method::properties( 'taxonomies' ) ); ?>',
+            order:              '<?php echo search\core\method::properties( 'order' ); ?>',
+            order_by:           '<?php echo search\core\method::properties( 'order_by' ); ?>',
+            filter_type:        '<?php echo search\core\method::properties( 'filter_type' ); ?>',
+			category_name:      '<?php echo search\core\method::properties( 'category_name') ; ?>',
+        	author_name:       	'<?php echo search\core\method::properties( 'author_name') ; ?>',
+        	tag:    			'<?php echo search\core\method::properties( 'tag') ; ?>',
             queried_object:     '<?php echo $queried_object_string; ?>',
             page_number:        1,
             nonce:              '<?php echo $nonce; ?>'
@@ -838,13 +837,13 @@ class theme extends \q_search {
 	public static function count_results( $count = 0 )
 	{	
 
-		// helper::log( core::properties( 'results', 'array' ) );
+		// h::log( search\core\method::properties( 'results', 'array' ) );
 
 		printf (
 			'<h5 class="mb-5 col-12 q-search-count-results text-center" data-count="%d">%d %s</h5>'
 			,   intval( $count )
 			,   intval( $count )
-			,   intval( $count ) > 1 ? core::properties( 'results', 'array' )[1] : core::properties( 'results', 'array' )[0]
+			,   intval( $count ) > 1 ? search\core\method::properties( 'results', 'array' )[1] : search\core\method::properties( 'results', 'array' )[0]
 		);
 
   	}
@@ -861,11 +860,11 @@ class theme extends \q_search {
 	{
 
 		// allow message to be passed ##
-		$message = ! is_null( $string ) ? $string : core::properties( 'no_results' ) ;
+		$message = ! is_null( $string ) ? $string : search\core\method::properties( 'no_results' ) ;
 
 ?>
     <div class="no-results text-center col-12 mt-0 mb-0">
-		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
+		<img class="push-20" src="<?php echo h::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message; ?></h5>
 		<div>Sorry, that filter combination returned no results.</div>
 		<div>Please try different criteria or <a href="#" class="qs-reset">Clear all Filters</a>.</div>
@@ -888,11 +887,11 @@ class theme extends \q_search {
 	{
 
 		// allow message to be passed ##
-		$message = ! is_null( $array ) ? $array : core::properties( 'load_message', 'array' ) ;
+		$message = ! is_null( $array ) ? $array : search\core\method::properties( 'load_message', 'array' ) ;
 
 ?>
     <div class="no-results text-center col-12 mt-0 mb-0">
-		<img class="push-20" src="<?php echo helper::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
+		<img class="push-20" src="<?php echo h::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message['title']; ?></h5>
 		<div><?php echo $message['body']; ?></div>
     </div>

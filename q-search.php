@@ -24,7 +24,7 @@
  * GitHub Plugin URI: qstudio/q-search
 */
 
-use q\search\core\helper as helper;
+use q\search\core\helper as h;
 
 defined( 'ABSPATH' ) OR exit;
 
@@ -114,9 +114,9 @@ if ( ! class_exists( 'q_search' ) ) {
                 self::$debug ;
 
             // test ##
-            // helper::log( 'Q exists: '.json_encode( class_exists( 'Q' ) ) );
-            // helper::log( 'Q debug: '.json_encode( \Q::$debug ) );
-            // helper::log( json_encode( self::$debug ) );
+            // h::log( 'Q exists: '.json_encode( class_exists( 'Q' ) ) );
+            // h::log( 'Q debug: '.json_encode( \Q::$debug ) );
+            // h::log( json_encode( self::$debug ) );
 
             return self::$debug;
 
@@ -209,7 +209,7 @@ if ( ! class_exists( 'q_search' ) ) {
                 ! class_exists( 'Q' )
             ) {
 
-                helper::log( 'Q classes are required, install required plugin.' );
+                h::log( 'Q classes are required, install required plugin.' );
 
                 return false;
 
@@ -239,7 +239,7 @@ if ( ! class_exists( 'q_search' ) ) {
 
             // methods ##
             require_once self::get_plugin_path( 'library/core/helper.php' );
-            require_once self::get_plugin_path( 'library/core/core.php' );
+            require_once self::get_plugin_path( 'library/core/method.php' );
 
             // backend ##
             require_once self::get_plugin_path( 'library/admin/ajax.php' );
@@ -248,7 +248,7 @@ if ( ! class_exists( 'q_search' ) ) {
             #require_once self::get_plugin_path( 'library/theme/widget/search.php' );
 
             // frontend ##
-            require_once self::get_plugin_path( 'library/theme/theme.php' );
+            require_once self::get_plugin_path( 'library/theme/ui.php' );
 
         }
 

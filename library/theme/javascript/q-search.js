@@ -389,11 +389,15 @@
                     if (e.type == 'reset') {
 
                         formData = '';
-	
+						
+						// hide reset ##
 						$("#q-search-form input[type='reset']").hide();
 
 						// empty searcher ##
 						$('#searcher').removeAttr('value');
+
+						// reset selects ##
+						$('.q-search-select').prop('selectedIndex',0);
 						
                     } else {
 

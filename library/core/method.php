@@ -2,12 +2,15 @@
 
 namespace q\search\core;
 
+// Q ##
+use q\core;
+use q\get;
+
 use q\search\core\helper as h;
 use q\search; // whole class namespace
-// use function Sodium\crypto_sign_verify_detached;
 
 // load it up ##
-#\q\search\core\method::run();
+\q\search\core\method::run();
 
 class method extends \q_search {
 
@@ -17,7 +20,7 @@ class method extends \q_search {
         if ( ! \is_admin() ) {
             
             // load scripts early, so theme files can override ##
-            \add_action( 'wp_enqueue_scripts', array( get_class(), 'wp_enqueue_scripts' ), 2 );
+            // \add_action( 'wp_enqueue_scripts', array( get_class(), 'wp_enqueue_scripts' ), 2 );
 
         }
 
@@ -68,7 +71,7 @@ class method extends \q_search {
         $config["pagination"]       = \apply_filters( 'q/search/pagination', true );
         $config["ajax_section"]     = \apply_filters( 'q/search/ajax_section', true );
         $config["markup"]           = \apply_filters( 'q/search/markup', 
-                                        '<li class="ajax-loaded q-search-default qq">
+                                        '<li class="ajax-loaded q-search-default">
                                             <h3>%title%</h3>
                                             <a href="%permalink%" title="%title%">
                                                 <img src="%src%" />
@@ -534,7 +537,7 @@ class method extends \q_search {
     {
 
         // new WP_Query ##
-        $qs_query = new \WP_Query( $args );
+		$qs_query = new \WP_Query( $args );
         
         // h::log( $args );
 
@@ -553,6 +556,8 @@ class method extends \q_search {
             search\theme\ui::count_results( $qs_query->found_posts );
             // h::log( $qs_query );
             // h::log( 'Count: '.$qs_query->found_posts );
+
+			// we need to move to q/render here ##
 
             // h::log( $args );
 

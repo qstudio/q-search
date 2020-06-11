@@ -27,7 +27,9 @@ class ui extends \q_search {
 	*/
 	public static function wp_enqueue_scripts() {
 
-		\wp_register_style( 'q-search-css', h::get( "theme/css/q-search.css", 'return' ), '', self::version, 'all' );
+		// h::log( 'd:>adding q search assets..' );
+
+		\wp_register_style( 'q-search-css', h::get( "theme/css/q.search.css", 'return' ), '', self::version, 'all' );
 		\wp_enqueue_style( 'q-search-css' );
 
 		// history ##
@@ -35,7 +37,7 @@ class ui extends \q_search {
 		#\wp_enqueue_script('jquery-history-js');
 
 		// add JS ## -- after all dependencies ##
-		\wp_enqueue_script( 'q-search-js', h::get( "theme/javascript/q-search.js", 'return' ), array( 'jquery' ), self::version, true );
+		\wp_enqueue_script( 'q-search-js', h::get( "theme/javascript/q.search.js", 'return' ), array( 'jquery' ), self::version, true );
 
 		// pass variable values defined in parent class ##
 		\wp_localize_script( 'q-search-js', 'q_search', array(

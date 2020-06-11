@@ -31,7 +31,7 @@ defined( 'ABSPATH' ) OR exit;
 if ( ! class_exists( 'q_search' ) ) {
     
     // instatiate plugin via WP plugins_loaded - init is too late for CPT ##
-    add_action( 'plugins_loaded', array ( 'q_search', 'get_instance' ), 5 );
+    add_action( 'after_setup_theme', array ( 'q_search', 'get_instance' ), 5 );
     
     class q_search {
                 
@@ -209,7 +209,7 @@ if ( ! class_exists( 'q_search' ) ) {
                 ! class_exists( 'Q' )
             ) {
 
-                h::log( 'Q classes are required, install required plugin.' );
+                h::log( 'e:>Q classes are required, install required plugin.' );
 
                 return false;
 

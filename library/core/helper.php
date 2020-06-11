@@ -42,8 +42,21 @@ class helper extends \q_search {
     public static function log( $log )
     {
 
-        return core\helper::log( $log );
-
+        // return core\helper::log( $log );
+		
+		// shift callback level, as we added another level.. ##
+		\add_filter( 
+			'q/core/log/traceback/function', function () {
+			return 4;
+		});
+		\add_filter( 
+			'q/core/log/traceback/file', function () {
+			return 3;
+		});
+		
+		// pass to core\log::set();
+		return core\log::set( $log );
+		
     }
 
 

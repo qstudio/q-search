@@ -6,28 +6,23 @@ namespace q\search\core;
 use q\core;
 use q\get;
 
+// Q Search ##
 use q\search\core\helper as h;
 use q\search; // whole class namespace
 
 // load it up ##
-\q\search\core\method::run();
+// \q\search\core\method::run();
 
 class method extends \q_search {
 
     public static function run( $args = null )
     {
 
-        if ( ! \is_admin() ) {
-            
-            // load scripts early, so theme files can override ##
-            // \add_action( 'wp_enqueue_scripts', array( get_class(), 'wp_enqueue_scripts' ), 2 );
-
-        }
 
     }
 
 
-
+	/*
     public static function config()
     {
 
@@ -37,18 +32,18 @@ class method extends \q_search {
         // h::log( 'Device: '.h::device() );
 
 		// values ##
-		$config["control"]          = \apply_filters( 'q/search/control', [ 'load' => '1', 'empty' => '1' ] ); //loading state ##
-        $config["widget_title"]     = __( "Search", 'q-search' );
-        $config["results"]          = \apply_filters( 'q/search/results', ['Result found', 'Results found'] ); // results text ##
-		$config["no_results"]       = \apply_filters( 'q/search/no_results', 'No Results found' ); // results text ##
-		$config["load_empty"]       = \apply_filters( 'q/search/load_empty', [ // empty load text ##
-											'title' => 'Search Tool',
-											'body' 	=> 'Use the search option and filters to find results.' 
-									]);
-        $config["table"]            = \apply_filters( 'q/search/table', 'posts' ); // users or posts ##
-        $config["args"]             = \apply_filters( 'q/search/args', false ); // additional args passed to render method ##
-        $config["application"]      = \apply_filters( 'q/search/application', 'general' ); // for filtering via ajax ##
-        $config["device"]           = \apply_filters( 'q/search/device', h::device() ); // for device check via ajax ##
+		// $config["control"]          = \apply_filters( 'q/search/control', [ 'load' => '1', 'empty' => '1' ] ); //loading state ##
+        // $config["widget_title"]     = __( "Search", 'q-search' );
+        // $config["results"]          = \apply_filters( 'q/search/results', ['Result found', 'Results found'] ); // results text ##
+		// $config["no_results"]       = \apply_filters( 'q/search/no_results', 'No Results found' ); // results text ##
+		// $config["load_empty"]       = \apply_filters( 'q/search/load_empty', [ // empty load text ##
+		// 									'title' => 'Search Tool',
+		// 									'body' 	=> 'Use the search option and filters to find results.' 
+		// 							]);
+        // $config["table"]            = \apply_filters( 'q/search/table', 'posts' ); // users or posts ##
+        // $config["args"]             = \apply_filters( 'q/search/args', false ); // additional args passed to render method ##
+        // $config["application"]      = \apply_filters( 'q/search/application', 'general' ); // for filtering via ajax ##
+        // $config["device"]           = \apply_filters( 'q/search/device', h::device() ); // for device check via ajax ##
         $config["post_type"]        = \apply_filters( 'q/search/post_type', 'post' );
         $config["taxonomies"]       = \apply_filters( 'q/search/taxonomies', 'category,post_tag' );
         $config["category_name"]    = \apply_filters( 'q/search/category_name', \get_query_var( 'category_name', '' ) );
@@ -88,7 +83,7 @@ class method extends \q_search {
         return self::$properties = $config;
 
     }
-
+	*/
 
     /**
     * Load plugin properties
@@ -96,10 +91,10 @@ class method extends \q_search {
     * @since    2.0.0
     * @return   Array
     */
-    public static function properties( $key = null, $return = 'string' )
+    public static function properties( $key = null, $format = 'string' )
     {
 
-        // h::log( 'called for key: '.$key );
+        // h::log( 'd:>called for key: '.$key );
 
         // properties not defined yet ##
         if ( ! self::$properties ) {
@@ -107,39 +102,77 @@ class method extends \q_search {
             // h::log( 'properties empty, so loading fresh...' );
             // h::log( self::$passed_args );
 
-            self::config();
+            // self::config();
+			self::$properties = core\config::get('q_search');
 
-        }
+		}
+		
+		// h::log( 'd:>key: '.$key.' format: '.$format );
 
-        // kick back specified key or whole array ##
-        return 
-            ( 
-				! is_null( $key ) 
-				&& isset( self::$properties[$key] ) 
-				// && array_key_exists( $key, self::$properties ) 
-			) ? 
+		// missing specified key ##
+		if ( 
+			! is_null( $key ) 
+			&& ! isset( self::$properties[$key] ) 
+		){
 
-            // single array item ##
-            ( is_array ( self::$properties[$key] ) && 'string' == $return ) ? 
-            implode( ",", self::$properties[$key] ) : // flat csv ##
-            self::$properties[$key] : // as array ##
+			h::log( 'd:>key: '.$key.' missing' );
+
+			return false;
+
+		}
+
+		// kick back specified key or whole array ##
+		if ( 
+			! is_null( $key ) 
+			&& isset( self::$properties[$key] ) 
+			// && array_key_exists( $key, self::$properties ) 
+		){
+
+			if ( 
+				is_array ( self::$properties[$key] ) 
+				&& 'string' == $format 
+			){
+
+				// flat csv ##
+				$return = implode( ",", self::$properties[$key] ) ;
+
+				// h::log( 'd:>>key: '.$key.' -- array as string--'.$return );
+
+			} else {
+
+				 // as array ##
+				$return = self::$properties[$key] ;
+
+				// h::log( 'd:>string OR array--' );
+				// h::log( $return );
+
+			}
+
+		} else {
+
+			// whole thing ##
+            $return = self::$properties ;
+
+		}
+
+		// kick back ##
+		return $return;
+
+
+        // return 
+        //     ( 
+		// 		! is_null( $key ) 
+		// 		&& isset( self::$properties[$key] ) 
+		// 		// && array_key_exists( $key, self::$properties ) 
+		// 	) ? 
+
+        //     // single array item ##
+        //     ( is_array ( self::$properties[$key] ) && 'string' == $return ) ? 
+        //     implode( ",", self::$properties[$key] ) : // flat csv ##
+        //     self::$properties[$key] : // as array ##
             
-            // whole thing ##
-            self::$properties ;
-
-    }
-
-
-
-    public static function assets()
-    {
-
-        if ( ! \is_admin() ) {
-            
-            // load scripts early, so theme files can override ##
-            \add_action( 'wp_enqueue_scripts', array( get_class(), 'wp_enqueue_scripts' ), 2 );
-
-        }
+        //     // whole thing ##
+        //     self::$properties ;
 
     }
 
@@ -148,7 +181,7 @@ class method extends \q_search {
     public static function wp_enqueue_scripts()
     {
 
-        return search\theme\ui::wp_enqueue_scripts();
+        return search\ui\enqueue::wp_enqueue_scripts();
 
     }
 
@@ -157,8 +190,8 @@ class method extends \q_search {
     public static function render()
     {
 
-        #h::log( 'rendering search..' );
-        return search\theme\ui::render();
+		#h::log( 'rendering search..' );
+        return search\ui\render::render();
 
     }
 
@@ -170,7 +203,7 @@ class method extends \q_search {
         // sanity ##
         if ( is_null( $posted ) ) {
 
-            h::log( 'no defaults..' );
+            h::log( 'd:>no defaults..' );
 
             return false;
 
@@ -302,9 +335,11 @@ class method extends \q_search {
         $posted['table']              = isset( $_POST['table'] ) ? $_POST['table'] : search\core\method::properties( 'table' );
         $posted['application']        = isset( $_POST['application'] ) ? $_POST['application'] : search\core\method::properties( 'application' );
         $posted['device']             = isset( $_POST['device'] ) ? $_POST['device'] : search\core\method::properties( 'device' );
-        $posted['post_type']          = isset( $_POST['post_type'] ) ? explode( ',', $_POST['post_type'] ) : explode( ',', search\core\method::properties( 'post_type' ) );
+		$posted['post_type']          = isset( $_POST['post_type'] ) ? 
+										explode( ',', $_POST['post_type'] ) : 
+										explode( ',', search\core\method::properties( 'post_type' ) );
         $posted['posts_per_page']     = isset( $_POST['posts_per_page'] ) ? (int)$_POST['posts_per_page'] : search\core\method::properties( 'posts_per_page' );
-        $posted['class']              = isset( $_POST['class'] ) ? $_POST['class'] : search\core\method::properties( 'class' ) ;
+        // $posted['class']              = isset( $_POST['class'] ) ? $_POST['class'] : search\core\method::properties( 'class' ) ;
         $posted['order']              = isset( $_POST['order'] ) ? $_POST['order'] : search\core\method::properties( 'order' ) ;
         $posted['order_by']           = isset( $_POST['order_by'] ) ? $_POST['order_by'] : search\core\method::properties( 'order_by' ) ;
         $posted['category_name']      = isset( $_POST['category_name'] ) ? $_POST['category_name'] : search\core\method::properties( 'category_name' ) ;
@@ -473,7 +508,7 @@ class method extends \q_search {
         if ( ! empty( $users ) ) {
 
             // show results count ##
-            search\theme\ui::count_results( $qs_query->get_total() );
+            search\ui\render::count_results( $qs_query->get_total() );
             #h::log( 'Count: '.$qs_query->get_total() );
 
             // loop over results ##
@@ -500,7 +535,7 @@ class method extends \q_search {
 
                 } else {
 
-                    search\theme\ui::result();
+                    search\ui\render::result();
 
                 } // template ##
 
@@ -513,15 +548,13 @@ class method extends \q_search {
 
             #h::log( 'No results found, we need to show that..' );
 
-            search\theme\ui::no_results();
+            search\ui\render::no_results();
 
         }
 
         if( $args['pagination'] ) {
             
-            // h::log( 'loading pagination..' );
-
-            search\theme\ui::pagination( $qs_query->get_total(), $args['number'], self::get_posted() );
+            search\ui\render::pagination( $qs_query->get_total(), $args['number'], self::get_posted() );
 
         }
 
@@ -553,7 +586,7 @@ class method extends \q_search {
             // h::log( 'Posts found, continue..' );
 
             // show results count ##
-            search\theme\ui::count_results( $qs_query->found_posts );
+            search\ui\render::count_results( $qs_query->found_posts );
             // h::log( $qs_query );
             // h::log( 'Count: '.$qs_query->found_posts );
 
@@ -591,29 +624,29 @@ class method extends \q_search {
                 // iterate ##
                 $count ++;
 
-                if ( 
-                    class_exists( $args['class'] ) 
-                    && method_exists( $args['class'], 'q_search' ) 
-                ) {
+                // if ( 
+                //     class_exists( $args['class'] ) 
+                //     && method_exists( $args['class'], 'q_search' ) 
+                // ) {
 
-                    // h::log( "class found.." );
+                //     // h::log( "class found.." );
 
-                    // call class method ##
-                    call_user_func_array (
-                        array( $args['class'], "q_search" ),
-                        array(
-                            \get_the_ID(),
-                            self::properties()
-                        )
-                    );
+                //     // call class method ##
+                //     call_user_func_array (
+                //         array( $args['class'], "q_search" ),
+                //         array(
+                //             \get_the_ID(),
+                //             self::properties()
+                //         )
+                //     );
 
-                } else {
+                // } else {
 
                     // h::log( 'default template..' );
 
-                    search\theme\ui::result();
+                    search\ui\render::result();
 
-                } // template ##
+                // } // template ##
 
             } // while loop ##
 
@@ -621,7 +654,7 @@ class method extends \q_search {
 
             // h::log( 'No results found, we need to show that..' );
 
-            search\theme\ui::no_results();
+            search\ui\render::no_results();
 
         }
 
@@ -633,8 +666,10 @@ class method extends \q_search {
         // build pagination ##
         if( $args['pagination'] ) {
 
+			h::log( 'd:>loading pagination..' );
+
             // build pagination ##
-            search\theme\ui::pagination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
+            search\ui\render::pagination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );
 
         }
 
@@ -686,7 +721,7 @@ class method extends \q_search {
 		// 	// h::log( $control );
 		// 	// h::log( 'Load Blank' );
 
-		// 	return search\theme\ui::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
+		// 	return search\ui\render::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
 
         //     // die();
 
@@ -723,7 +758,7 @@ class method extends \q_search {
         ) {
 
             // seems not ##
-            // search\theme\ui::no_results(  __( 'Please select a filter.', 'q-search' ) ); // show the sad face :(
+            // search\ui\render::no_results(  __( 'Please select a filter.', 'q-search' ) ); // show the sad face :(
 
 			// h::log( '$Filters were empty..' );
 
@@ -734,7 +769,7 @@ class method extends \q_search {
 				// h::log( $control );
 				// h::log( 'Load Blank' );
 	
-				return search\theme\ui::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
+				return search\ui\render::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
 	
 				// die();
 	
@@ -765,7 +800,7 @@ class method extends \q_search {
 				// h::log( $control );
 				// h::log( 'Empty Blank' );
 	
-				return search\theme\ui::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
+				return search\ui\render::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
 
             	die();
 	
@@ -948,7 +983,7 @@ class method extends \q_search {
         }
 
         // grab extra data to pass to query ##
-        $args['class'] = $posted['class'];
+        // $args['class'] = $posted['class'];
         $args['pagination'] = $pagination;
 
         // h::log( $args );

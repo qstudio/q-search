@@ -13,7 +13,7 @@
  * Plugin Name:     Q Search
  * Plugin URI:      https://www.qstudio.us
  * Description:     Filter posts by taxonomies or text search using AJAX to load results
- * Version:         3.4.0
+ * Version:         4.0.0
  * Author:          Q Studio
  * Author URI:      https://www.qstudio.us
  * License:         GPL
@@ -39,10 +39,8 @@ if ( ! class_exists( 'q_search' ) ) {
         private static $instance = null;
 
         // Plugin Settings
-        const version = '3.4.0';
-        // static $device = ''; // start false ##
+        const version = '4.0.0';
         static $debug = false;
-        // static $load_count = 0;
         const text_domain = 'q-search'; // for translation ##
 
         // plugin properties ##
@@ -238,17 +236,18 @@ if ( ! class_exists( 'q_search' ) ) {
             }
 
             // methods ##
-            require_once self::get_plugin_path( 'library/core/helper.php' );
+			require_once self::get_plugin_path( 'library/core/helper.php' );
+			require_once self::get_plugin_path( 'library/core/config.php' );
             require_once self::get_plugin_path( 'library/core/method.php' );
 
             // backend ##
-            require_once self::get_plugin_path( 'library/admin/ajax.php' );
+            require_once self::get_plugin_path( 'library/admin/_controller.php' );
             
-            // widgets for template ##
+            // @todo -- widgets for template ##
             #require_once self::get_plugin_path( 'library/theme/widget/search.php' );
 
             // frontend ##
-            require_once self::get_plugin_path( 'library/theme/ui.php' );
+            require_once self::get_plugin_path( 'library/ui/_controller.php' );
 
         }
 

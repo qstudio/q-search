@@ -1,81 +1,41 @@
 <?php
 
-namespace q\search\theme;
+namespace q\search\ui;
 
+// Q ##
+use q\core;
+
+// Q Seaarch ##
 use q\search\core\helper as h;
 use q\search; // whole namespace ##
 
 // load it up ##
-\q\search\theme\ui::run();
+// \q\search\ui\render::run();
 
-class ui extends \q_search {
+class render extends \q_search {
 
 	public static function run()
   	{
 
 		// image sizes ##
-		\add_action( 'after_setup_theme', array( get_class(), 'add_image_sizes' ) );
+		// \add_action( 'after_setup_theme', array( get_class(), 'add_image_sizes' ) );
 
-	  }
-
-
-
-	/*
-	* Script enqueuer
-	*
-	* @since  2.0
-	*/
-	public static function wp_enqueue_scripts() {
-
-		// h::log( 'd:>adding q search assets..' );
-
-		\wp_register_style( 'q-search-css', h::get( "theme/css/q.search.css", 'return' ), '', self::version, 'all' );
-		\wp_enqueue_style( 'q-search-css' );
-
-		// history ##
-		#\wp_register_script('jquery-history-js', h::get( "theme/javascript/jquery.history.js" , 'return' ) ,array('jquery'), self::version, true );
-		#\wp_enqueue_script('jquery-history-js');
-
-		// add JS ## -- after all dependencies ##
-		\wp_enqueue_script( 'q-search-js', h::get( "theme/javascript/q.search.js", 'return' ), array( 'jquery' ), self::version, true );
-
-		// pass variable values defined in parent class ##
-		\wp_localize_script( 'q-search-js', 'q_search', array(
-			'ajaxurl'           => \admin_url( 'admin-ajax.php', \is_ssl() ? 'https' : 'http' ), /*, 'https' */ ## add 'https' to use secure URL ##
-			'debug'             => self::$debug,
-			'site_name'         => \get_bloginfo("sitename")
-		,   'search'            => __( 'Search', 'q-search' )
-		,   'search_results_for'=> __( 'Results', 'q-search' )
-		//,   'on_load_text' => __( 'Search & filter to see results', 'q-search' )
-		));
-
-  	}
+	}
 
 
-	/**
-	 * Add image sizes crops
-	 *
-	 * @since        0.1.0
-	 */
-	public static function add_image_sizes()
-	{
 
-		\add_image_size( 'desktop-q-search', 800, 600, true ); // desktop course landing page ##
-		\add_image_size( 'handheld-q-search', 600, 400, true ); // handheld course landing page ##
-
-  	}	
-
-
+	  
 	/**
 	 * Render the search engine
 	 *
 	 * @since       0.1
 	 * @return      HTML
 	 */
-	public static function render()
+	public static function module()
 	{
 
-    // h::log( 'rendering...' );
+	// h::log( 'rendering...' );
+	h::log( search\core\method::properties( 'args' ) );
 
     // let's check if there are any posts to search, defined on very high, loose terms... ##
     if ( search\core\method::has_posts() ) {
@@ -146,53 +106,53 @@ class ui extends \q_search {
 
 
 
-  /**
-   * Results Markup
-   *
-   * @since    2.0.0
-   * @return   String
-   */
-  public static function result()
-  {
+	/**
+	 * Results Markup
+	 *
+	 * @since    2.0.0
+	 * @return   String
+	 */
+  	public static function result()
+  	{
 
 ?>
-    <div class="ajax-loaded q-search-default">
-      	<h3><?php \the_title();?></h3>
-		<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>">
-			<?php \the_post_thumbnail(array( 150, 150 )); ?>
+	<div class="col-12 col-md-6 col-lg-4 ajax-loaded q-search-default">
+		<a href="<?php \the_permalink(); ?>">
+			<img class="fit card-img-top" alt="Open" src="<?php echo \get_the_post_thumbnail_url( \get_the_ID(), 'square' ); ?>" />
 		</a>
-		<p><?php \the_excerpt(); ?></p>
-		<a href="<?php \the_permalink(); ?>" title="<?php \the_title();?>"><?php _e( "Read More", 'q-search' ); ?></a>
-    </div>
+		<div class="card-body">
+			<h5 class="card-title"><a href="%permalink%" title="Read More"><?php \the_title();?></a></h5>
+			<p class="card-text"><?php \the_excerpt(); ?></p>
+			<p class="card-text">
+				<small class="text-muted"><?php \the_date(); ?></small>
+				<small class="text-muted">in <a href="%category_permalink%" title="%category_name%">%category_name%</a> </small>    
+			</p>
+		</div>
+	</div>
 <?php
 
-  }
+  	}
 
 
 
-  /**
-   * Create HTML area to hold AJAX loaded content
-   *
-   * @since    2.0.0
-   * @return   String
-   */
-  public static function results()
-  {
+	/**
+	 * Create HTML area to hold AJAX loaded content
+	 *
+	 * @since    2.0.0
+	 * @return   String
+	 */
+	public static function results()
+	{
 
 ?>
     <div id="ajax-content" class="col-12">
-      	<div id="q-search-results" class="<?php echo \apply_filters( 'q/search/results/class', 'row mb-1' ); ?>">
+      	<div id="q-search-results" class="<?php echo search\core\method::properties( 'results_class' ); ?>">
 <?php
 
 		// h::log( search\core\method::properties( 'control', 'array' ) );
 
 		// run load query ##
 		search\core\method::query( search\core\method::properties( 'control', 'array' ) );
-		// if ( false === search\core\method::query( search\core\method::properties( 'control', 'array' ) ) ) {
-
-			// theme::load_empty( search\core\method::properties( 'load_empty', 'array' ) );
-
-		// }
 
 ?>
       	</div>
@@ -221,7 +181,7 @@ class ui extends \q_search {
 		$table = search\core\method::properties( 'table' );
 		$application = search\core\method::properties( 'application' );
 		$device = search\core\method::properties( 'device' );
-		$class = search\core\method::properties( 'class' );
+		// $class = search\core\method::properties( 'class' );
 		$filter_type = search\core\method::properties( 'filter_type' );
 		$hide_titles = search\core\method::properties( 'hide_titles' );
 		// $filter_position = search\core\method::properties( 'filter_position' );
@@ -350,7 +310,7 @@ class ui extends \q_search {
 
 ?>
 			</div>
-			<div id="q-search" class="<?php echo \apply_filters( 'q/search/button/class', 'row' ); ?>">
+			<div id="q-search" class="<?php echo search\core\method::properties( 'button_class' ); ?>">
 				<div class="buttons col-12 text-center mb-3 mt-2">
 					<div class="input">
 						<input type="reset" id="reset" class="qs-button qs-reset" value="Reset Options">
@@ -520,35 +480,22 @@ class ui extends \q_search {
 	public static function pagination( $total_posts, $posts_per_page, $posted )
 	{
 
-		// h::log( 'rebuilding pagination on device:'. $posted["device"] );
+		// switch ( $posted["device"] ) {
 
-		// if ( 
-		// 	! search\core\method::get_pagination( $total_posts, $posts_per_page, $page_number )
-		// ){
+		// 	case ( 'handheld' ) :
 
-		// 	h::log( 'No posts to paginate..' );
+		// 		self::pagination_handheld( $total_posts, $posts_per_page, $posted );
 
-		// 	return false;
+		// 	break ;
+
+		// 	case ( 'desktop' ) :
+		// 	default :
+
+		self::pagination_desktop( $total_posts, $posts_per_page, $posted );
+
+		// 	break ;
 
 		// }
-
-		// handheld ##
-		switch ( $posted["device"] ) {
-
-			case ( 'handheld' ) :
-
-				self::pagination_handheld( $total_posts, $posts_per_page, $posted );
-
-			break ;
-
-			case ( 'desktop' ) :
-			default :
-
-				self::pagination_desktop( $total_posts, $posts_per_page, $posted );
-
-			break ;
-
-		}
 
 	}
 
@@ -639,8 +586,9 @@ class ui extends \q_search {
     // h::log( 'Loading Desktop Pagination..' );
 
 ?>
-    <nav class="q-search-pagination col-12 mt-3">
-      	<div class="pagination-inner">
+<div class="col-12">
+	<nav class="row row justify-content-center mt-5 mb-5">
+		<ul class="pagination">
 <?php
 
         if( $_POST && isset($_POST['paged']) && $_POST['paged'] > 1 ) {
@@ -648,7 +596,7 @@ class ui extends \q_search {
 			$page_number = $_POST['paged'];
 
 ?>
-			<a class="paginationNav page-numbers prev" rel="prev" href="#"><span>&lsaquo;</span></a>
+			<li class="page-item"><a class="page-link paginationNav page-numbers prev" rel="prev" href="#"><span>&lsaquo;</span></a></li>
 <?php
 
         } else {
@@ -658,7 +606,7 @@ class ui extends \q_search {
         }
 
 ?>
-        <span class="qs-pages page-numbers-wrapper">
+        	<!-- <span class="qs-pages page-numbers-wrapper"> -->
 <?php
 
 	#h::log( $posts_per_page );
@@ -668,7 +616,7 @@ class ui extends \q_search {
 	#h::log( $pagination );
 
 	// limit number of items shown on screen ##
-	$max = 7;
+	$max = 3;
 
 	// work out how many filler links to allow in between next and back arrows ##
 	if( $pagination['page_number'] < $max ) {
@@ -698,8 +646,7 @@ class ui extends \q_search {
 	if ( $pagination['page_number'] >= $max ) {
 
 ?>
-  		<a href='#' class='page-numbers pagelink-1 pagelink' rel="1">1</a><a href='#' class="page-numbers dots">&#8230;</a>
-<?php
+  				<li class="page-item"><a href='#' class='page-link page-numbers pagelink-1 pagelink' rel="1">1</a><a href='#' class="page-numbers dots">&#8230;</a></li><?php
 
 	}
 
@@ -717,14 +664,15 @@ class ui extends \q_search {
 		if ( $pagination['page_number'] == $i ) {
 
 ?>
-   	 	<a href="#" class="page-numbers pagelink-<?php echo $i; ?> pagelink current" rel="<?php echo $i; ?>"><?php echo $i; ?></a>
+				<li class="page-item active"><span aria-current="page" class="page-link current"><?php echo $i; ?></span></li>
+				<!-- <span aria-current="page" class="page-link current">1</span>	 -->
 <?php
 
     	// normal ##
 	  	} else {
 
 ?>
-    	<a href='#' class="page-numbers pagelink-<?php echo $i; ?> pagelink" rel="<?php echo $i; ?>"><?php echo $i; ?></a>
+    			<li class="page-item"><a href='#' class="page-link page-numbers pagelink-<?php echo $i; ?> pagelink" rel="<?php echo $i; ?>"><?php echo $i; ?></a></li>
 <?php
 
   		}
@@ -735,29 +683,29 @@ class ui extends \q_search {
 	if ( $pagination['page_number'] < ( $pagination['pages'] - floor( $max / 2 ) ) ) {
 
 ?>
-  		<span class="page-numbers dots">&#8230;</span>
-		<a href='#' class="page-numbers pagelink-<?php echo $pagination['pages']; ?> pagelink" rel="<?php echo $pagination['pages']; ?>"><?php echo $pagination['pages']; ?></a>
+  				<span class="page-numbers dots">&#8230;</span>
+				<li class="page-item"><a href='#' class="page-link page-numbers pagelink-<?php echo $pagination['pages']; ?> pagelink" rel="<?php echo $pagination['pages']; ?>"><?php echo $pagination['pages']; ?></a></li>
 <?php
 
 	}
 
 ?>
-        </span>
+        	<!-- </span> -->
 <?php
 
 		// check if we need to print pagination ##
 		if ( ( $posts_per_page * $page_number ) < $total_posts && $posts_per_page < $total_posts ) {
 
 ?>
-		<a class="paginationNav page-numbers next" rel="next" href="#"><span>Next &rsaquo;</span></a>
+			<li class="page-item"><a class="page-link paginationNav page-numbers next" rel="next" href="#"><span>Next &rsaquo;</span></a></li>
 <?php
 
         } // pagination check ##
 
 ?>
-        	<div class="clear"></div>
-      	</div>
-    </nav>
+      	</ul>
+	</nav>
+</div>
 <?php
 
 	}
@@ -797,6 +745,7 @@ class ui extends \q_search {
 	
 	// REMOVED ##
 	// filter_position:    search\core\method::properties( 'filter_position'); ##
+	// h::log( 'd:>'.search\core\method::properties( 'callback' ) );
 
 ?>
     <script type="text/javascript">
@@ -804,10 +753,10 @@ class ui extends \q_search {
         // configure QS_Filters ##
         var QS_CONFIG = {
             ajaxurl:            '<?php echo \home_url( 'wp-admin/admin-ajax.php' ) ?>',
-            table:              '<?php echo search\core\method::properties( 'table') ; ?>',
-            callback:           '<?php echo search\core\method::properties( 'callback') ; ?>',
-            application:        '<?php echo search\core\method::properties( 'application') ; ?>',
-            device:             '<?php echo search\core\method::properties( 'device') ; ?>',
+            table:              '<?php echo search\core\method::properties( 'table' ) ; ?>',
+            callback:           '<?php echo search\core\method::properties( 'js_callback' ) ; ?>',
+            application:        '<?php echo search\core\method::properties( 'application' ) ; ?>',
+            device:             '<?php echo search\core\method::properties( 'device' ) ; ?>',
             post_type:          '<?php echo search\core\method::properties( 'post_type' ); ?>',
             posts_per_page:     '<?php echo (int)search\core\method::properties( 'posts_per_page' ); ?>',
             taxonomies:         '<?php echo str_replace( " ", "", search\core\method::properties( 'taxonomies' ) ); ?>',
@@ -815,8 +764,8 @@ class ui extends \q_search {
             order_by:           '<?php echo search\core\method::properties( 'order_by' ); ?>',
             filter_type:        '<?php echo search\core\method::properties( 'filter_type' ); ?>',
 			category_name:      '<?php echo search\core\method::properties( 'category_name') ; ?>',
-        	author_name:       	'<?php echo search\core\method::properties( 'author_name') ; ?>',
-        	tag:    			'<?php echo search\core\method::properties( 'tag') ; ?>',
+        	author_name:       	'<?php echo search\core\method::properties( 'author_name' ) ; ?>',
+        	tag:    			'<?php echo search\core\method::properties( 'tag' ) ; ?>',
             queried_object:     '<?php echo $queried_object_string; ?>',
             page_number:        1,
             nonce:              '<?php echo $nonce; ?>'
@@ -866,7 +815,7 @@ class ui extends \q_search {
 
 ?>
     <div class="no-results text-center col-12 mt-0 mb-0">
-		<img class="push-20" src="<?php echo h::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
+		<img class="push-20" src="<?php echo h::get( "ui/asset/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message; ?></h5>
 		<div>Sorry, that filter combination returned no results.</div>
 		<div>Please try different criteria or <a href="#" class="qs-reset">Clear all Filters</a>.</div>
@@ -893,7 +842,7 @@ class ui extends \q_search {
 
 ?>
     <div class="no-results text-center col-12 mt-0 mb-0">
-		<img class="push-20" src="<?php echo h::get( "theme/css/images/search-no-results.svg", 'return' ); ?>" />
+		<img class="push-20" src="<?php echo h::get( "ui/asset/css/images/search-no-results.svg", 'return' ); ?>" />
 		<h5 class='push-20'><?php echo $message['title']; ?></h5>
 		<div><?php echo $message['body']; ?></div>
     </div>

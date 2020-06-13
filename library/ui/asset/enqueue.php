@@ -33,7 +33,7 @@ class enqueue extends \q_search {
             && true == $option->q_search->css    
         ) {
 
-			h::log( 'd:>adding q search CSS assets..' );
+			// h::log( 'd:>adding q search CSS assets..' );
 
 			\wp_register_style( 'q-search-css', h::get( "ui/asset/css/q.search.css", 'return' ), '', self::version, 'all' );
 			\wp_enqueue_style( 'q-search-css' );
@@ -46,7 +46,7 @@ class enqueue extends \q_search {
             && true == $option->q_search->js    
         ) {
 
-			h::log( 'd:>adding q search JS assets..' );
+			// h::log( 'd:>adding q search JS assets..' );
 
 			// add JS ## -- after all dependencies ##
 			\wp_enqueue_script( 'q-search-js', h::get( "ui/asset/javascript/q.search.js", 'return' ), array( 'jquery' ), self::version, true );

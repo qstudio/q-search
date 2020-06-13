@@ -41,7 +41,7 @@ class option extends \q_theme {
 			'name' => 'q_option_q_search',
 			'type' => 'checkbox',
 			'instructions' => 'Control Assets for <a href="https://github.com/qstudio/q-search" target="_blank">Q Search</a>',
-			'required' => 1,
+			'required' => 0,
 			'conditional_logic' => 0,
 			'choices' => array(
 				'css' => 'CSS',

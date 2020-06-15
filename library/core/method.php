@@ -666,7 +666,7 @@ class method extends \q_search {
         // build pagination ##
         if( $args['pagination'] ) {
 
-			h::log( 'd:>loading pagination..' );
+			// h::log( 'd:>loading pagination..' );
 
             // build pagination ##
             search\ui\render::pagination( $qs_query->found_posts, $args['posts_per_page'], self::get_posted() );

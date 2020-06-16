@@ -8,9 +8,10 @@ module.exports = function(grunt) {
 
 	// Load Tasks ##
 	grunt.loadTasks( $root_path+'node_modules/grunt-contrib-clean/tasks' ); // Clean ##
-	grunt.loadTasks( $root_path+'node_modules/grunt-contrib-watch/tasks'); // Watcher ##
-	grunt.loadTasks( $root_path+'node_modules/grunt-postcss/tasks'); // Post Processing ##
-	grunt.loadTasks( $root_path+'node_modules/grunt-dart-sass/tasks'); // DART SASS ##
+	grunt.loadTasks( $root_path+'node_modules/grunt-contrib-watch/tasks' ); // Watcher ##
+	grunt.loadTasks( $root_path+'node_modules/grunt-postcss/tasks' ); // Post Processing ##
+	grunt.loadTasks( $root_path+'node_modules/grunt-dart-sass/tasks' ); // DART SASS ##
+	grunt.loadTasks( $root_path+'node_modules/grunt-contrib-copy/tasks' ); // copy ##
 
 	// ------- configuration ------- ##
 	grunt.initConfig({
@@ -24,30 +25,25 @@ module.exports = function(grunt) {
 		src: 'library/ui/asset/scss/index.scss',
 
 		// main destination file ##
-		dest: 'library/ui/asset/css/q.scss.theme.css',
+		dest: 'library/ui/asset/css/index.css',
 
 		// minified destination file ##
-		dest_min: 'library/ui/asset/css/q.scss.theme.min.css',
+		dest_min: 'library/ui/asset/css/index.min.css',
 
 		// object of files to clean up pre-compile ##
 		clean_dest: [
-			'library/ui/asset/css/q.scss.*.css', // regex to find all generated css files ##
-			'library/ui/asset/css/q.scss.*.map', // regex to find all generated map files ##
+			'library/ui/asset/css/*.css', // regex to find all generated css files ##
+			'library/ui/asset/css/*.map', // regex to find all generated map files ##
 		],
 
 		// scss files to watch ##
 		watch_scss: [
-			'library/ui/asset/scss/view/*.scss', // regex to track all Template files ##
-			'library/ui/asset/scss/ui/*.scss', // regex to track all UI files ##
-			'library/ui/asset/scss/q/*.scss', // regex to track all config files ##
-			'library/ui/asset/scss/module/*.scss', // regex to track all config files ##
-			'library/ui/asset/scss/bootstrap/*.scss', // regex to track main Bootstrap include ##
+			'library/ui/asset/scss/*.scss', // regex to track all Template files ##
 		],
 
 		// php files to watch ##
 		watch_php: [
-			'library/ui/view/*.php', // ui view [template] folder ##
-			'library/ui/furniture/*.php' // furniture [ header, footer, blocks.. ] folder ##
+			// 'library/ui/view/*.php', // ui view [template] folder ##
 		],
 
 		// ------- end config ------- ##
@@ -78,7 +74,7 @@ module.exports = function(grunt) {
 			// track changes to scss src files ##
 			'sass': {
 				'options': {
-					'livereload': live_reload, // dedicated port for live reload ##
+					// 'livereload': live_reload, // dedicated port for live reload ##
 				},
 				'files':
 					'<%= watch_scss %>'
@@ -101,6 +97,34 @@ module.exports = function(grunt) {
 				]
 			},
 			*/
+		},
+
+		'copy': {
+			'main': {
+			  	'files': [
+
+					{
+						'expand': 	true, 
+						'cwd':		'library/ui/asset/scss/',
+						'src': 		'index.scss', 
+						'dest': 	'../../themes/q-parent/library/ui/asset/scss/plugin/q_search', 
+						// 'filter': 	'isFile' 
+					}
+
+					// includes files within path
+					// {expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile'},
+			
+					// includes files within path and its sub-directories
+					// {expand: true, src: ['path/**'], dest: 'dest/'},
+			
+					// makes all src relative to cwd
+					// {expand: true, cwd: 'path/', src: ['**'], dest: 'dest/'},
+			
+					// flattens results to a single level
+					// {expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile'},
+
+				],
+			},
 		},
 
 		// post processing formating ##
@@ -135,6 +159,7 @@ module.exports = function(grunt) {
 	grunt.registerTask( 'default', [
 		// 'clean', // clean up old compilled files ##
 		'dart-sass', // Dart SASS ##
+		'copy' // copy to Q Parent ##
 		// 'postcss', // post processing formating ## ##
 	]);
 
@@ -143,6 +168,7 @@ module.exports = function(grunt) {
 		'clean', // clean up old compilled files ##
 		'dart-sass', // Dart SASS ##
 		'postcss', // post processing formating ## ##
+		'copy' // copy to  ##
 	]);
 
 	// Watch Task ##

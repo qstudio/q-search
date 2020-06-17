@@ -35,7 +35,7 @@ class enqueue extends \q_search {
 
 			// h::log( 'd:>adding q search CSS assets..' );
 
-			\wp_register_style( 'q-search-css', h::get( "ui/asset/css/q.search.css", 'return' ), '', self::version, 'all' );
+			\wp_register_style( 'q-search-css', h::get( "ui/asset/css/index.css", 'return' ), '', self::version, 'all' );
 			\wp_enqueue_style( 'q-search-css' );
 
 		}

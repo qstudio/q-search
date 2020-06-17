@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 
 	// root - crude ##
 	var $root_path = '../../../';
-	var live_reload = 1339; // port for live reload ##
+	// var live_reload = 1339; // port for live reload ##
 
 	// Load Tasks ##
 	grunt.loadTasks( $root_path+'node_modules/grunt-contrib-clean/tasks' ); // Clean ##

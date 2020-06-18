@@ -111,7 +111,7 @@ module.exports = function(grunt) {
 						// // The function must return a string with the complete destination ##
 						// https://gruntjs.com/configuring-tasks#the-rename-property
 						'rename': 	function ( ) {
-							return '../../themes/q-parent/library/_source/scss/plugin/q_search.css' ; 
+							return '../../themes/q-parent/library/_source/scss/plugin/_q_search.css' ; 
 						}
 						// 'filter'	: 'isFile',
 						// 'flatten'	: true 

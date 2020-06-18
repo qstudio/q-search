@@ -327,9 +327,11 @@ body.handheld #q-search #ajax-filtered-section .pagination {
 #q-search li.ajaxFilterItem.filter-selected a {
   color: #96bd1b;
   background: url("images/icon_remove_12_50.png") no-repeat right 12px transparent;
+  background: url("images/icon_remove_12_50.png") no-repeat right 12px transparent;
 }
 
 #q-search li.ajaxFilterItem.filter-selected a:hover {
+  background-image: url("images/icon_remove_12.gif") no-repeat right 12px transparent;
   background-image: url("images/icon_remove_12.gif") no-repeat right 12px transparent;
 }
 
@@ -494,5 +496,4 @@ div.ajax-button.on {
     /*font-size: 14px;*/
   }
 }
-
 /*# sourceMappingURL=index.css.map */

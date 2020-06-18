@@ -104,11 +104,17 @@ module.exports = function(grunt) {
 			  	'files': [
 
 					{
-						'expand': 	true, 
-						'cwd':		'library/ui/asset/scss/',
-						'src': 		'index.scss', 
-						'dest': 	'../../themes/q-parent/library/ui/asset/scss/plugin/q_search', 
-						// 'filter': 	'isFile' 
+						'expand'	: true, 
+						'cwd'		: 'library/ui/asset/scss/',
+						'src'		: 'index.scss', 
+						'dest'		: '../../themes/q-parent/library/_source/scss/plugin/q_search.css', 
+						// // The function must return a string with the complete destination ##
+						// https://gruntjs.com/configuring-tasks#the-rename-property
+						'rename': 	function ( ) {
+							return '../../themes/q-parent/library/_source/scss/plugin/q_search.css' ; 
+						}
+						// 'filter'	: 'isFile',
+						// 'flatten'	: true 
 					}
 
 					// includes files within path

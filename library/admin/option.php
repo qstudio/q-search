@@ -17,7 +17,7 @@ class option extends \q_theme {
     {
 
         // add extra options in asset control API ##
-		\add_filter( 'q/plugin/acf/add_field_groups/q_option_ui', [ get_class(), 'filter_acf_option_ui' ], 10, 1 );
+		// \add_filter( 'q/plugin/acf/add_field_groups/q_option_ui', [ get_class(), 'filter_acf_option_ui' ], 10, 1 );
         
     }
 

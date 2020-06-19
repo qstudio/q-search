@@ -174,7 +174,7 @@ module.exports = function(grunt) {
 		'clean', // clean up old compilled files ##
 		'dart-sass', // Dart SASS ##
 		'postcss', // post processing formating ## ##
-		'copy' // copy to  ##
+		// 'copy' // copy to  ##
 	]);
 
 	// Watch Task ##

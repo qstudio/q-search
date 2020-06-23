@@ -35,7 +35,7 @@ class render extends \q_search {
 	{
 
 	// h::log( 'rendering...' );
-	h::log( search\core\method::properties( 'args' ) );
+	// h::log( search\core\method::properties( 'args' ) );
 
     // let's check if there are any posts to search, defined on very high, loose terms... ##
     if ( search\core\method::has_posts() ) {

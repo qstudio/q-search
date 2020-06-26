@@ -103,7 +103,7 @@ class method extends \q_search {
             // h::log( self::$passed_args );
 
             // self::config();
-			self::$properties = core\config::get('q_search');
+			self::$properties = core\config::get([ 'context' => 'q_search', 'process' => 'all' ]);
 
 		}
 		

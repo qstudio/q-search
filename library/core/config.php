@@ -19,7 +19,7 @@ class config extends \q_search {
 
 		// filter Q Config -- ALL FIELDS [ $array "data" ]##
 		// Priority -- Q = 1, Q Plugin = 10, Q Parent = 100, Q Child = 1000
-		\add_filter( 'q/config/get/all', [ get_class(), 'get' ], 10, 2 );
+		\add_filter( 'q/config/get/all', [ get_class(), 'load' ], 10, 1 );
 
     }
 
@@ -32,32 +32,25 @@ class config extends \q_search {
 	 *
 	 * @return		Array $array -- must return, but can be empty ##
 	 */
-	public static function get( Array $config = null, $field = null ) {
+	public static function load( $args = null ) {
 
-		// starts with an empty array ##
-		$array = [];
-
-		// load config from JSON ##
-		if (
-			// $array = include( self::get_plugin_path('q.config.php') )
-			$array = core\config::load( self::get_plugin_path('q.config.php'), 'q-search' )
+		// sanity ##
+		if ( 
+			is_null( $args )
+			|| ! is_array( $args )
+			|| ! isset( $args['context'] ) 
+			|| ! isset( $args['process'] )
 		){
 
-			// check if we have a 'config' key.. and take that ##
-			if ( is_array( $array ) ) {
+			// h::log( $args );
+			h::log( 'e:>Missing context and process q_search' );
 
-				// merge filtered data into default data ##
-				// $config = core\method::parse_args( $array, $config );
-				$config = $array;
-
-			}
+			return false;
 
 		}
 
-		// h::log( $config );
-
-		// kick back ##
-		return $config;
+		// return config file ##
+		return core\config::load( self::get_plugin_path( 'q.config.php' ), 'q-search' );
 
 	}
 

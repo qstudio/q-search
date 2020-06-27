@@ -39,7 +39,7 @@ class config extends \q_search {
 			is_null( $args )
 			|| ! is_array( $args )
 			|| ! isset( $args['context'] ) 
-			|| ! isset( $args['process'] )
+			|| ! isset( $args['task'] )
 		){
 
 			// h::log( $args );
